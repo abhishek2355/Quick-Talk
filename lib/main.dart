@@ -10,10 +10,10 @@ void main() {
   // For setting orientation
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then(
     (value) {
-      initializeFirebase();
       runApp(
         const MyApp(),
       );
+      initializeFirebase();
     },
   );
 }

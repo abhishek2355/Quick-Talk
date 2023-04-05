@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
     Dialogs.showProgressBar(context);
 
     // Signin with google
-    _signInWithGoogle().then((user) {
+    _signInWithGoogle().then((user) async {
       // Hide progressbar indicator
       Navigator.pop(context);
       // If return value is null
@@ -40,12 +40,24 @@ class _LoginPageState extends State<LoginPage> {
         log('\nUser: ${user.user}');
         log('\nUserAdditionalInfo: ${user.additionalUserInfo}');
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomePage(),
-          ),
-        );
+        // We chack user exist
+        if ((await APIs.userexist())) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomePage(),
+            ),
+          );
+        } else {
+          APIs.createUser().then((value) => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePage(),
+                  ),
+                )
+              });
+        }
       }
     });
   }
