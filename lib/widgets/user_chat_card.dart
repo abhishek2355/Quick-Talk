@@ -1,6 +1,7 @@
 import 'package:chat_app/model/chat_user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ChatUserCard extends StatefulWidget {
   final UserChat user;
@@ -17,6 +18,7 @@ class ChatUserCard extends StatefulWidget {
 class _ChatUserCardState extends State<ChatUserCard> {
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     // import list
 
     return Card(
@@ -27,7 +29,16 @@ class _ChatUserCardState extends State<ChatUserCard> {
         onTap: () {},
         child: ListTile(
           // User profile picture
-          leading: const CircleAvatar(child: Icon(CupertinoIcons.person)),
+          // leading: const CircleAvatar(child: Icon(CupertinoIcons.person)),
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(media.height * 30 / 926),
+            child: CachedNetworkImage(
+              height: media.height * 60 / 926,
+              width: media.height * 60 / 926,
+              imageUrl: widget.user.image,
+              errorWidget: (context, url, error) => const CircleAvatar(child: Icon(CupertinoIcons.person)),
+            ),
+          ),
 
           // User name
           title: Text(widget.user.name),
