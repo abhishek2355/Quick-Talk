@@ -7,9 +7,26 @@ class APIs {
 
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  // For store the self informatio
+  static late UserChat me;
+
+  // to return current user
+  static User get user => auth.currentUser!;
+
   // for checking user exist or not?
   static Future<bool> userexist() async {
-    return (await firestore.collection('user').doc(auth.currentUser!.uid).get()).exists;
+    return (await firestore.collection('user').doc(user.uid).get()).exists;
+  }
+
+  // for get self information on prifile page
+  static Future<void> getSelfInfo() async {
+    await firestore.collection('user').doc(user.uid).get().then((user) async {
+      if (user.exists) {
+        me = UserChat.fromJson(user.data()!);
+      } else {
+        await createUser().then((value) => getSelfInfo());
+      }
+    });
   }
 
   // to creat new user
@@ -17,20 +34,20 @@ class APIs {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
     final ChatUser = UserChat(
-        id: auth.currentUser!.uid,
+        id: user.uid,
         lastActive: time,
-        image: auth.currentUser!.photoURL.toString(),
-        email: auth.currentUser!.email.toString(),
-        name: auth.currentUser!.displayName.toString(),
+        image: user.photoURL.toString(),
+        email: user.email.toString(),
+        name: user.displayName.toString(),
         pushToken: '',
         createdAt: time,
         isOnline: false,
         about: 'Hey, I am using we chat. ');
 
-    return await firestore.collection('user').doc(auth.currentUser!.uid).set(ChatUser.toJson());
+    return await firestore.collection('user').doc(user.uid).set(ChatUser.toJson());
   }
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
-    return firestore.collection('user').where('id', isNotEqualTo: auth.currentUser!.uid).snapshots();
+    return firestore.collection('user').where('id', isNotEqualTo: user.uid).snapshots();
   }
 }
