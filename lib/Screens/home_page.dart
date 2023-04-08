@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
 
       // Body of the project
       body: StreamBuilder(
-        stream: APIs.firestore.collection('user').snapshots(),
+        stream: APIs.getAllUsers(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
 
