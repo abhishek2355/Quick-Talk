@@ -1,3 +1,4 @@
+import 'package:chat_app/Screens/profile_page.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/widgets/user_chat_card.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,7 +42,14 @@ class _HomePageState extends State<HomePage> {
 
           // More icons
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Profile(user: list[0]),
+                  ),
+                );
+              },
               icon: Icon(
                 Icons.more_vert,
                 size: media.height * 28 / 926,
