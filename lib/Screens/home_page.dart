@@ -15,7 +15,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<UserChat> list = [];
+  // For storing all users
+  List<UserChat> _list = [];
+
+  // For storing serched user
+  final List<UserChat> _searchlist = [];
+
+  // For storing search
+  bool _isSearch = false;
   @override
   void initState() {
     super.initState();
@@ -32,19 +39,48 @@ class _HomePageState extends State<HomePage> {
         leading: Icon(CupertinoIcons.home, size: media.height * 28 / 926),
 
         // App Text
-        title: Text(
-          "We Chat",
-          style: TextStyle(fontSize: media.height * 28 / 926),
-        ),
+        title: (_isSearch)
+            ? TextFormField(
+                decoration: const InputDecoration(border: InputBorder.none, hintText: 'Name or email'),
+                autofocus: true,
+                style: TextStyle(fontSize: media.height * 25 / 926, letterSpacing: 0.5),
+
+                // When search text is entered then update the search list
+                onChanged: (val) {
+                  // search logic
+                  _searchlist.clear();
+
+                  // Iterate the main list
+                  for (var i in _list) {
+                    if (i.name.toLowerCase().contains(val.toLowerCase()) || (i.email.toLowerCase().contains(val.toLowerCase()))) {
+                      _searchlist.add(i);
+                    }
+                    setState(() {
+                      _searchlist;
+                    });
+                  }
+                },
+              )
+            : Text(
+                "We Chat",
+                style: TextStyle(fontSize: media.height * 28 / 926),
+              ),
 
         actions: [
           // Search Icon
           IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.search,
-                size: media.height * 28 / 926,
-              )),
+            onPressed: () {
+              setState(() {
+                _isSearch = !_isSearch;
+              });
+            },
+            icon: (_isSearch)
+                ? const Icon(CupertinoIcons.clear_circled_solid)
+                : Icon(
+                    Icons.search,
+                    size: media.height * 28 / 926,
+                  ),
+          ),
 
           // More icons
           IconButton(
@@ -91,19 +127,22 @@ class _HomePageState extends State<HomePage> {
               // If data is there
               if (snapshot.hasData) {
                 final data = snapshot.data?.docs;
-                list = data?.map((e) => UserChat.fromJson(e.data())).toList() ?? [];
+                _list = data?.map((e) => UserChat.fromJson(e.data())).toList() ?? [];
               }
 
-              if (list.isNotEmpty) {
+              if (_list.isNotEmpty) {
                 // return listview
                 return ListView.builder(
                   itemBuilder: ((context, index) {
                     return ChatUserCard(
-                      user: list[index],
+                      // if we search then search list will show
+                      user: (_isSearch) ? _searchlist[index] : _list[index],
                     );
                     // return Text("Name: ${list[index]}");
                   }),
-                  itemCount: list.length,
+
+                  // If we search user then count will be searchlist count otherwise main list count
+                  itemCount: (_isSearch) ? _searchlist.length : _list.length,
                   physics: const BouncingScrollPhysics(),
                 );
               } else {
