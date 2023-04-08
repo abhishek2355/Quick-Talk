@@ -29,4 +29,8 @@ class APIs {
 
     return await firestore.collection('user').doc(auth.currentUser!.uid).set(ChatUser.toJson());
   }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
+    return firestore.collection('user').where('id', isNotEqualTo: auth.currentUser!.uid).snapshots();
+  }
 }
