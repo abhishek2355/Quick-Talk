@@ -1,3 +1,4 @@
+import 'package:chat_app/main.dart';
 import 'package:chat_app/model/chat_user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,6 @@ class ChatUserCard extends StatefulWidget {
 class _ChatUserCardState extends State<ChatUserCard> {
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
     // import list
 
     return Card(
