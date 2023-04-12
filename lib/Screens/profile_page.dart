@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/auth/login_page.dart';
 import 'package:chat_app/helper/dialogs.dart';
+import 'package:chat_app/main.dart';
 import 'package:chat_app/model/chat_user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,6 @@ class _ProfileState extends State<Profile> {
   final _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: (() => FocusScope.of(context).unfocus()),
       child: Scaffold(
@@ -99,7 +99,9 @@ class _ProfileState extends State<Profile> {
                           child: MaterialButton(
                             height: media.height * 50 / 926,
                             elevation: 1,
-                            onPressed: () {},
+                            onPressed: () {
+                              _showBottomSheet();
+                            },
                             color: Colors.white,
                             shape: const CircleBorder(),
                             child: Icon(
@@ -210,5 +212,42 @@ class _ProfileState extends State<Profile> {
             ),
           )),
     );
+  }
+
+  void _showBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        builder: (_) {
+          return ListView(
+            padding: EdgeInsets.only(top: media.height * 30 / 926, bottom: media.height * 30 / 926),
+            shrinkWrap: true,
+            children: [
+              Text(
+                'Pick profile Photo',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: media.height * 30 / 926, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: media.height * 20 / 926,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white, fixedSize: Size(media.height * 100 / 926, media.height * 100 / 926), shape: const CircleBorder()),
+                      child: Image.asset('assets/Image/camera.png')),
+                  ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white, fixedSize: Size(media.height * 100 / 926, media.height * 100 / 926), shape: const CircleBorder()),
+                      child: Image.asset('assets/Image/photo.png'))
+                ],
+              )
+            ],
+          );
+        });
   }
 }
