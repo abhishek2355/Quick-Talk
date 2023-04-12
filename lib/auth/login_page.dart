@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:chat_app/Screens/home_page.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/helper/dialogs.dart';
+import 'package:chat_app/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -90,7 +91,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
     return Scaffold(
       // App Bar
       appBar: AppBar(

@@ -1,5 +1,6 @@
 import 'package:chat_app/Screens/profile_page.dart';
 import 'package:chat_app/api/apis.dart';
+import 'package:chat_app/main.dart';
 import 'package:chat_app/widgets/user_chat_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +32,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
-
     // Gesture detection is for close the keybord when we tap anywhere in the screen
     return GestureDetector(
       onTap: () {

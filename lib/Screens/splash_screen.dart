@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:chat_app/Screens/home_page.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/auth/login_page.dart';
+import 'package:chat_app/main.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -39,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
+    media = MediaQuery.of(context).size;
     return Scaffold(
       // App Bar
       appBar: AppBar(
