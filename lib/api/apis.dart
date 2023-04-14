@@ -1,11 +1,18 @@
+import 'dart:developer';
+
 import 'package:chat_app/model/chat_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 class APIs {
   static FirebaseAuth auth = FirebaseAuth.instance;
 
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  // For accessinf the image storage
+  static FirebaseStorage imagestorage = FirebaseStorage.instance;
 
   // For store the self informatio
   static late UserChat me;
@@ -54,5 +61,26 @@ class APIs {
   // Save the updated information
   static Future<void> updatedUserInformation() async {
     await firestore.collection('user').doc(user.uid).update({'name': me.name, 'about': me.about});
+  }
+
+  // Update profile picture of user
+  static Future<void> updateProfilePicture(File file) async {
+    // getting image file path
+    final ext = file.path.split('.').last;
+    log('Extension is: $ext');
+
+    // Store file ref with path
+    final ref = imagestorage.ref().child('Profile_picture/${user.uid}.$ext');
+
+    // Uploding image size
+    await ref.putFile(file, SettableMetadata(contentType: 'image/$ext')).then((p0) {
+      log('Data Transfer: ${p0.bytesTransferred / 1000} kb');
+    });
+
+    // // Uploading image in the database
+    me.image = await ref.getDownloadURL();
+    await firestore.collection('user').doc(user.uid).update({
+      'image': me.image,
+    });
   }
 }
