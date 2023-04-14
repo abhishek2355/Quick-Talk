@@ -263,7 +263,11 @@ class _ProfileState extends State<Profile> {
                       setState(() {
                         _pickedImage = image.path;
                       });
+
+                      // Call function for update the image in database
                       log('Image path : ${image.path}');
+
+                      APIs.updateProfilePicture(File(_pickedImage!));
                       Navigator.pop(context);
                     }
                   },
@@ -282,7 +286,11 @@ class _ProfileState extends State<Profile> {
                             _pickedImage = image.path;
                           },
                         );
+
+                        // Call function for update the image in database
                         log('Image path : ${image.path}');
+
+                        APIs.updateProfilePicture(File(_pickedImage!));
                         // ignore: use_build_context_synchronously
                         Navigator.pop(context);
                       }
