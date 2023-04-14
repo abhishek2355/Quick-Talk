@@ -52,6 +52,10 @@ dependencies:
   # to show the image of user
   cached_network_image: ^3.2.3
 
+  # Image picker
+  image_picker: ^0.8.7+2
+  path_provider: ^2.0.14
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
