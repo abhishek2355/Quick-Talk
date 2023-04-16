@@ -49,18 +49,18 @@ class _ChatUserCardState extends State<ChatUserCard> {
           ),
 
           // User name
-          title: Text(widget.user.name),
-
-          // last message
-          subtitle: Text(
-            widget.user.about,
-            maxLines: 1,
+          title: Text(
+            widget.user.name,
+            style: TextStyle(fontSize: media.height * 24 / 926),
           ),
 
+          // last message
+          subtitle: Text(widget.user.about, maxLines: 1, style: TextStyle(fontSize: media.height * 18 / 926)),
+
           // last message time
-          trailing: const Text(
+          trailing: Text(
             '12:00 am',
-            style: TextStyle(color: Colors.black45),
+            style: TextStyle(color: Colors.black45, fontSize: media.height * 18 / 926),
           ),
         ),
       ),

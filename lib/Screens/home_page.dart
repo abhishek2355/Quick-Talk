@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    media = MediaQuery.of(context).size;
     // Gesture detection is for close the keybord when we tap anywhere in the screen
     return GestureDetector(
       onTap: () {
@@ -50,70 +51,73 @@ class _HomePageState extends State<HomePage> {
         },
         child: Scaffold(
           // App Bar
-          appBar: AppBar(
-            // Home Icon
-            leading: Icon(CupertinoIcons.home, size: media.height * 28 / 926),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(media.height * 70 / 926),
+            child: AppBar(
+              // Home Icon
+              leading: Icon(CupertinoIcons.home, size: media.height * 28 / 926),
 
-            // App Text
-            title: (_isSearch)
-                ? TextFormField(
-                    decoration: const InputDecoration(border: InputBorder.none, hintText: 'Name or email'),
-                    autofocus: true,
-                    style: TextStyle(fontSize: media.height * 25 / 926, letterSpacing: 0.5),
+              // App Text
+              title: (_isSearch)
+                  ? TextFormField(
+                      decoration: const InputDecoration(border: InputBorder.none, hintText: 'Name or email'),
+                      autofocus: true,
+                      style: TextStyle(fontSize: media.height * 25 / 926, letterSpacing: 0.5),
 
-                    // When search text is entered then update the search list
-                    onChanged: (val) {
-                      // search logic
-                      _searchlist.clear();
+                      // When search text is entered then update the search list
+                      onChanged: (val) {
+                        // search logic
+                        _searchlist.clear();
 
-                      // Iterate the main list
-                      for (var i in _list) {
-                        if (i.name.toLowerCase().contains(val.toLowerCase()) || (i.email.toLowerCase().contains(val.toLowerCase()))) {
-                          _searchlist.add(i);
+                        // Iterate the main list
+                        for (var i in _list) {
+                          if (i.name.toLowerCase().contains(val.toLowerCase()) || (i.email.toLowerCase().contains(val.toLowerCase()))) {
+                            _searchlist.add(i);
+                          }
+                          setState(() {
+                            _searchlist;
+                          });
                         }
-                        setState(() {
-                          _searchlist;
-                        });
-                      }
-                    },
-                  )
-                : Text(
-                    "We Chat",
-                    style: TextStyle(fontSize: media.height * 28 / 926),
-                  ),
+                      },
+                    )
+                  : Text(
+                      "We Chat",
+                      style: TextStyle(fontSize: media.height * 28 / 926),
+                    ),
 
-            actions: [
-              // Search Icon
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    _isSearch = !_isSearch;
-                  });
-                },
-                icon: (_isSearch)
-                    ? const Icon(CupertinoIcons.clear_circled_solid)
-                    : Icon(
-                        Icons.search,
-                        size: media.height * 35 / 926,
-                      ),
-              ),
-
-              // Profile icons
-              IconButton(
+              actions: [
+                // Search Icon
+                IconButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Profile(user: APIs.me),
-                      ),
-                    );
+                    setState(() {
+                      _isSearch = !_isSearch;
+                    });
                   },
-                  icon: Icon(
-                    CupertinoIcons.profile_circled,
-                    color: Colors.blue,
-                    size: media.height * 35 / 926,
-                  ))
-            ],
+                  icon: (_isSearch)
+                      ? const Icon(CupertinoIcons.clear_circled_solid)
+                      : Icon(
+                          Icons.search,
+                          size: media.height * 35 / 926,
+                        ),
+                ),
+
+                // Profile icons
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Profile(user: APIs.me),
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      CupertinoIcons.profile_circled,
+                      color: Colors.black,
+                      size: media.height * 35 / 926,
+                    ))
+              ],
+            ),
           ),
 
           // floating Action Button for add new user
@@ -129,7 +133,6 @@ class _HomePageState extends State<HomePage> {
             stream: APIs.getAllUsers(),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
-
                 // if data is loading
                 case ConnectionState.waiting:
                 case ConnectionState.none:
@@ -160,7 +163,6 @@ class _HomePageState extends State<HomePage> {
 
                       // If we search user then count will be searchlist count otherwise main list count
                       itemCount: (_isSearch) ? _searchlist.length : _list.length,
-                      physics: const BouncingScrollPhysics(),
                     );
                   } else {
                     return Center(
