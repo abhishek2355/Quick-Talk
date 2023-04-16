@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -91,14 +93,18 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    media = MediaQuery.of(context).size;
     return Scaffold(
       // App Bar
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        // App Text
-        title: Text(
-          "Welcome to We Chat",
-          style: TextStyle(fontSize: media.height * 28 / 926),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(media.height * 70 / 926),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          // App Text
+          title: Text(
+            "Welcome to We Chat",
+            style: TextStyle(fontSize: media.height * 28 / 926),
+          ),
         ),
       ),
 
@@ -108,12 +114,13 @@ class _LoginPageState extends State<LoginPage> {
           // App Icon
           AnimatedPositioned(
             top: media.height * 150 / 926,
-            right: _isAnimate ? media.width * 80 / 428 : -media.width * 428 / 428,
-            width: media.width * 250 / 428,
-            height: media.height * 250 / 926,
+            right: _isAnimate ? media.width * 50 / 428 : -media.width * 590 / 428,
+            left: media.width * 50 / 428,
             duration: const Duration(seconds: 2),
             child: Image.asset(
               'assets/Image/icon.png',
+              width: media.height * 250 / 926,
+              height: media.height * 250 / 926,
             ),
           ),
 
