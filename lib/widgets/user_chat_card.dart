@@ -1,3 +1,4 @@
+import 'package:chat_app/Screens/chating_page.dart';
 import 'package:chat_app/main.dart';
 import 'package:chat_app/model/chat_user.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,7 +27,14 @@ class _ChatUserCardState extends State<ChatUserCard> {
       color: Colors.blue[50],
       elevation: 1,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChattingPage(user: widget.user),
+            ),
+          );
+        },
         child: ListTile(
           // User profile picture
           // leading: const CircleAvatar(child: Icon(CupertinoIcons.person)),
