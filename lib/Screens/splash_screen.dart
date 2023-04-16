@@ -43,41 +43,45 @@ class _SplashScreenState extends State<SplashScreen> {
     media = MediaQuery.of(context).size;
     return Scaffold(
       // App Bar
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        // App Text
-        title: Text(
-          "Welcome to We Chat",
-          style: TextStyle(fontSize: media.height * 28 / 926),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(media.height * 70 / 926),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          // App Text
+          title: Text(
+            "Welcome to We Chat",
+            style: TextStyle(fontSize: media.height * 28 / 926),
+          ),
         ),
       ),
 
-      //  Body of Login page
+      //  Body of Splash screen
       body: Stack(
         children: [
           // App Icon
           Positioned(
             top: media.height * 150 / 926,
-            right: media.width * 80 / 428,
-            width: media.width * 250 / 428,
-            height: media.height * 250 / 926,
+            right: media.width * 89 / 428,
+            left: media.width * 89 / 428,
             child: Image.asset(
               'assets/Image/icon.png',
+              width: media.height * 250 / 926,
+              height: media.height * 250 / 926,
             ),
           ),
 
-          // Google SignIn button
+          // Text
           Positioned(
-              bottom: media.height * 120 / 926,
+              bottom: media.height * 150 / 926,
               left: media.width * 25 / 428,
-              width: media.width * 378 / 428,
-              height: media.height * 60 / 926,
+              right: media.width * 25 / 428,
               child: Text(
                 'MADE IN INDIA WITH ❤️',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: media.height * 21 / 926,
                   color: Colors.black87,
+                  fontWeight: FontWeight.bold,
                   letterSpacing: .5,
                 ),
               )),
