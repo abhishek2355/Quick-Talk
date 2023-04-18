@@ -19,6 +19,12 @@ class ChattingAppbar extends StatelessWidget {
       onTap: () {},
       child: Row(
         children: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.arrow_back,
+                size: media.height * 23 / 926,
+              )),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: media.width * 16 / 428),
             child: Center(
