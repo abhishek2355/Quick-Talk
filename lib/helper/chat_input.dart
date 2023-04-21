@@ -1,11 +1,16 @@
-import 'package:flutter/cupertino.dart';
+import 'package:chat_app/api/apis.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
+import '../model/chat_user.dart';
 
 class ChatInput extends StatelessWidget {
+  final textController;
+  final UserChat user;
   const ChatInput({
     super.key,
+    this.textController,
+    required this.user,
   });
 
   @override
@@ -29,6 +34,7 @@ class ChatInput extends StatelessWidget {
                   ),
                   Expanded(
                     child: TextField(
+                      controller: textController,
                       maxLines: null,
                       style: TextStyle(fontSize: media.height * 25 / 926),
                       decoration: const InputDecoration(hintText: 'Type Something...', hintStyle: TextStyle(color: Colors.black45), border: InputBorder.none),
@@ -63,7 +69,12 @@ class ChatInput extends StatelessWidget {
             minWidth: 0,
             padding:
                 EdgeInsets.only(top: media.height * 10 / 926, bottom: media.height * 10 / 926, left: media.height * 10 / 926, right: media.height * 5 / 926),
-            onPressed: () {},
+            onPressed: () {
+              if (textController.text.isNotEmpty) {
+                APIs.sendMessage(user, textController.text);
+                textController.text = '';
+              }
+            },
             child: Icon(
               Icons.send,
               color: Colors.white,
