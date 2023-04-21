@@ -20,7 +20,9 @@ class ChattingAppbar extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               icon: Icon(
                 Icons.arrow_back,
                 size: media.height * 23 / 926,
