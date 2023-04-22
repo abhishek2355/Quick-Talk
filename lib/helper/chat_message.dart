@@ -3,6 +3,7 @@ import 'package:chat_app/main.dart';
 import 'package:flutter/material.dart';
 
 import '../model/message.dart';
+import 'send_time.dart';
 
 class MessageCard extends StatefulWidget {
   final Messages messages;
@@ -43,7 +44,7 @@ class _MessageCardState extends State<MessageCard> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: media.width * 16 / 428),
           child: Text(
-            widget.messages.sent,
+            MessageSendTime.getTimeOfMessages(context: context, time: widget.messages.sent),
             style: TextStyle(fontSize: media.height * 15 / 926, color: Colors.black45),
           ),
         )
@@ -62,16 +63,19 @@ class _MessageCardState extends State<MessageCard> {
             SizedBox(
               width: media.width * 0.04,
             ),
-            Icon(
-              Icons.done_all_rounded,
-              color: Colors.blue,
-              size: media.height * 20 / 926,
-            ),
+            if (widget.messages.read.isEmpty)
+              Icon(
+                Icons.done_all_rounded,
+                color: Colors.blue,
+                size: media.height * 20 / 926,
+              ),
             SizedBox(
               width: media.width * 0.02,
             ),
+
+            // Sending Time
             Text(
-              widget.messages.read,
+              MessageSendTime.getTimeOfMessages(context: context, time: widget.messages.sent),
               style: TextStyle(fontSize: media.height * 15 / 926, color: Colors.black45),
             ),
           ],

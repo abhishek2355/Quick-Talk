@@ -58,7 +58,6 @@ class _ChattingPageState extends State<ChattingPage> {
                           // return listview
                           return ListView.builder(
                             itemCount: _list.length,
-                            padding: EdgeInsets.only(top: media.height * .01),
                             physics: const BouncingScrollPhysics(),
                             itemBuilder: ((context, index) {
                               return MessageCard(
