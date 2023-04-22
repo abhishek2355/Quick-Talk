@@ -27,62 +27,67 @@ class _ChattingPageState extends State<ChattingPage> {
   Widget build(BuildContext context) {
     media = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(media.height * 70 / 926),
-            child: AppBar(
-              automaticallyImplyLeading: false,
-              flexibleSpace: ChattingAppbar(widget: widget),
-            ),
-          ),
-          backgroundColor: const Color.fromARGB(255, 221, 236, 248),
-          body: Column(
-            children: [
-              Expanded(
-                child: StreamBuilder(
-                  stream: APIs.getAllMessages(widget.user),
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      // if data is loading
-                      case ConnectionState.waiting:
-                      case ConnectionState.none:
-                        return const SizedBox();
-
-                      // If some or all data is loading
-                      case ConnectionState.active:
-                      case ConnectionState.done:
-                        final data = snapshot.data?.docs;
-                        _list = data?.map((e) => Messages.fromJson(e.data())).toList() ?? [];
-
-                        if (_list.isNotEmpty) {
-                          // return listview
-                          return ListView.builder(
-                            itemCount: _list.length,
-                            physics: const BouncingScrollPhysics(),
-                            itemBuilder: ((context, index) {
-                              return MessageCard(
-                                messages: _list[index],
-                              );
-                            }),
-                          );
-                        } else {
-                          return Center(
-                            child: Text(
-                              "Say Hii 👋",
-                              style: TextStyle(fontSize: media.height * 25 / 926, letterSpacing: 2),
-                            ),
-                          );
-                        }
-                    }
-                  },
-                ),
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(media.height * 70 / 926),
+              child: AppBar(
+                automaticallyImplyLeading: false,
+                flexibleSpace: ChattingAppbar(widget: widget),
               ),
-              ChatInput(
-                textController: textController,
-                user: widget.user,
-              )
-            ],
-          )),
+            ),
+            backgroundColor: const Color.fromARGB(255, 221, 236, 248),
+            body: Column(
+              children: [
+                Expanded(
+                  child: StreamBuilder(
+                    stream: APIs.getAllMessages(widget.user),
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        // if data is loading
+                        case ConnectionState.waiting:
+                        case ConnectionState.none:
+                          return const SizedBox();
+
+                        // If some or all data is loading
+                        case ConnectionState.active:
+                        case ConnectionState.done:
+                          final data = snapshot.data?.docs;
+                          _list = data?.map((e) => Messages.fromJson(e.data())).toList() ?? [];
+
+                          if (_list.isNotEmpty) {
+                            // return listview
+                            return ListView.builder(
+                              itemCount: _list.length,
+                              physics: const BouncingScrollPhysics(),
+                              itemBuilder: ((context, index) {
+                                return MessageCard(
+                                  messages: _list[index],
+                                );
+                              }),
+                            );
+                          } else {
+                            return Center(
+                              child: Text(
+                                "Say Hii 👋",
+                                style: TextStyle(fontSize: media.height * 25 / 926, letterSpacing: 2),
+                              ),
+                            );
+                          }
+                      }
+                    },
+                  ),
+                ),
+                ChatInput(
+                  textController: textController,
+                  user: widget.user,
+                )
+              ],
+            )),
+      ),
     );
   }
 }
