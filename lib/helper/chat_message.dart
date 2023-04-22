@@ -22,6 +22,9 @@ class _MessageCardState extends State<MessageCard> {
 
   // Another user messages
   Widget _blueMessageCard() {
+    if (widget.messages.read.isEmpty) {
+      APIs.updateMessageReadStatus(widget.messages);
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -63,12 +66,21 @@ class _MessageCardState extends State<MessageCard> {
             SizedBox(
               width: media.width * 0.04,
             ),
-            if (widget.messages.read.isEmpty)
-              Icon(
-                Icons.done_all_rounded,
-                color: Colors.blue,
-                size: media.height * 20 / 926,
-              ),
+
+            // If message is read then it will work
+            (widget.messages.read.isNotEmpty)
+                ? Icon(
+                    Icons.done_all_rounded,
+                    color: Colors.blue,
+                    size: media.height * 20 / 926,
+                  )
+                : Icon(
+                    Icons.done_all_rounded,
+                    color: Colors.grey,
+                    size: media.height * 20 / 926,
+                  ),
+
+            // SizedBox
             SizedBox(
               width: media.width * 0.02,
             ),
