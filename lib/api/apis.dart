@@ -106,8 +106,15 @@ class APIs {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
     // Message to send
-    final Messages messages = Messages(fromId: user.uid, sent: time, msg: msg, toId: chatUser.id, type: Type.text, read: '12');
+    final Messages messages = Messages(fromId: user.uid, sent: time, msg: msg, toId: chatUser.id, type: Type.text, read: '');
     final ref = firestore.collection('chats/${getConversationID(chatUser.id)}/message/');
-    await ref.doc().set(messages.toJson());
+    await ref.doc(time).set(messages.toJson());
+  }
+
+  static Future<void> updateMessageReadStatus(Messages message) async {
+    firestore
+        .collection('chats/${getConversationID(message.fromId)}/message/')
+        .doc(message.sent)
+        .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
   }
 }
