@@ -1,0 +1,13 @@
+const double height1 = 1 / 926;
+const double height18 = 18 / 926;
+const double height20 = 20 / 926;
+const double height21 = 21 / 926;
+const double height40 = 40 / 926;
+const double height45 = 45 / 926;
+const double height50 = 50 / 926;
+const double height60 = 60 / 926;
+const double height70 = 70 / 926;
+const double height150 = 150 / 926;
+const double height200 = 200 / 926;
+const double height250 = 250 / 926;
+const double height300 = 300 / 926;
