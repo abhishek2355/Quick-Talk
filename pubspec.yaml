@@ -38,7 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   # for Connect firebase 
-  firebase_core: ^2.9.0
+  firebase_core: ^2.10.0
 
   # for handling firebase authentication
   firebase_auth: ^4.4.0
@@ -63,6 +63,9 @@ dependencies:
 
   # Emoji for app
   emoji_picker_flutter: ^1.5.4
+
+  # Animated text kit
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:
