@@ -1,12 +1,13 @@
 import 'package:chat_app/Screens/profile_page.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/main.dart';
-import 'package:chat_app/widgets/user_chat_card.dart';
+import 'package:chat_app/utils/helpers/app_ui_helpers/user_chat_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../model/chat_user.dart';
+import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
+import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -50,23 +51,24 @@ class _HomePageState extends State<HomePage> {
           }
         },
         child: Scaffold(
-          // App Bar
+          // AppBar
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(media.height * 70 / 926),
+            preferredSize: Size.fromHeight(media.height * app_heights.height70),
             child: AppBar(
-              // Home Icon
-              leading: Icon(CupertinoIcons.home, size: media.height * 28 / 926),
-
+              backgroundColor: const Color.fromARGB(255, 181, 227, 248),
               // App Text
               title: (_isSearch)
                   ? TextFormField(
-                      decoration: const InputDecoration(border: InputBorder.none, hintText: 'Name or email'),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: app_strings.homepageSearchbarText,
+                        hintStyle: TextStyle(color: Colors.black, fontSize: media.height * app_heights.height22),
+                      ),
                       autofocus: true,
-                      style: TextStyle(fontSize: media.height * 25 / 926, letterSpacing: 0.5),
+                      style: TextStyle(fontSize: media.height * app_heights.height25, letterSpacing: 0.5),
 
                       // When search text is entered then update the search list
                       onChanged: (val) {
-                        // search logic
                         _searchlist.clear();
 
                         // Iterate the main list
@@ -74,105 +76,125 @@ class _HomePageState extends State<HomePage> {
                           if (i.name.toLowerCase().contains(val.toLowerCase()) || (i.email.toLowerCase().contains(val.toLowerCase()))) {
                             _searchlist.add(i);
                           }
-                          setState(() {
-                            _searchlist;
-                          });
+                          setState(
+                            () {
+                              _searchlist;
+                            },
+                          );
                         }
                       },
                     )
                   : Text(
-                      "We Chat",
-                      style: TextStyle(fontSize: media.height * 28 / 926),
+                      app_strings.appName,
+                      style: TextStyle(fontSize: media.height * app_heights.height28, color: Colors.black, fontWeight: FontWeight.bold),
                     ),
 
               actions: [
                 // Search Icon
                 IconButton(
                   onPressed: () {
-                    setState(() {
-                      _isSearch = !_isSearch;
-                    });
+                    setState(
+                      () {
+                        _isSearch = !_isSearch;
+                      },
+                    );
                   },
                   icon: (_isSearch)
-                      ? const Icon(CupertinoIcons.clear_circled_solid)
+                      ? Icon(
+                          CupertinoIcons.clear_circled_solid,
+                          color: Colors.black,
+                          size: media.height * app_heights.height35,
+                        )
                       : Icon(
                           Icons.search,
-                          size: media.height * 35 / 926,
+                          size: media.height * app_heights.height35,
+                          color: Colors.black,
                         ),
                 ),
 
                 // Profile icons
                 IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Profile(user: APIs.me),
-                        ),
-                      );
-                    },
-                    icon: Icon(
-                      CupertinoIcons.profile_circled,
-                      color: Colors.black,
-                      size: media.height * 35 / 926,
-                    ))
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Profile(user: APIs.me),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    CupertinoIcons.profile_circled,
+                    color: Colors.black,
+                    size: media.height * app_heights.height35,
+                  ),
+                ),
               ],
             ),
           ),
 
-          // floating Action Button for add new user
-          floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                await APIs.auth.signOut();
-                await GoogleSignIn().signOut();
-              },
-              child: const Icon(Icons.add_comment_rounded)),
-
           // Body of the project
-          body: StreamBuilder(
-            stream: APIs.getAllUsers(),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                // if data is loading
-                case ConnectionState.waiting:
-                case ConnectionState.none:
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+          body: Center(
+            child: Container(
+              height: media.height,
+              width: media.width,
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                    Colors.white,
+                    Color.fromARGB(255, 52, 174, 231),
+                  ],
+                ),
+              ),
+              child: StreamBuilder(
+                stream: APIs.getAllUsers(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    // if data is loading
+                    case ConnectionState.waiting:
+                    case ConnectionState.none:
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
 
-                // If some or all data is loading
-                case ConnectionState.active:
-                case ConnectionState.done:
+                    // If some or all data is loading
+                    case ConnectionState.active:
+                    case ConnectionState.done:
 
-                  // If data is there
-                  if (snapshot.hasData) {
-                    final data = snapshot.data?.docs;
-                    _list = data?.map((e) => UserChat.fromJson(e.data())).toList() ?? [];
-                  }
+                      // If data is there
+                      if (snapshot.hasData) {
+                        final data = snapshot.data?.docs;
+                        _list = data?.map((e) => UserChat.fromJson(e.data())).toList() ?? [];
+                      }
 
-                  if (_list.isNotEmpty) {
-                    // return listview
-                    return ListView.builder(
-                      itemBuilder: ((context, index) {
-                        return ChatUserCard(
-                          // if we search then search list will show
-                          user: (_isSearch) ? _searchlist[index] : _list[index],
+                      if (_list.isNotEmpty) {
+                        return ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+
+                          itemBuilder: ((context, index) {
+                            return ChatUserCard(
+                              // if we search then search list will show
+                              user: (_isSearch) ? _searchlist[index] : _list[index],
+                            );
+                          }),
+
+                          // If we search user then count will be searchlist count otherwise main list count
+                          itemCount: (_isSearch) ? _searchlist.length : _list.length,
                         );
-                        // return Text("Name: ${list[index]}");
-                      }),
-
-                      // If we search user then count will be searchlist count otherwise main list count
-                      itemCount: (_isSearch) ? _searchlist.length : _list.length,
-                    );
-                  } else {
-                    return Center(
-                        child: Text(
-                      "No Connection Found",
-                      style: TextStyle(fontSize: media.height * 25 / 926, letterSpacing: 2),
-                    ));
+                      } else {
+                        return Center(
+                          child: Text(
+                            app_strings.homePageNoAnyConnection,
+                            style: TextStyle(fontSize: media.height * app_heights.height25, letterSpacing: 2),
+                          ),
+                        );
+                      }
                   }
-              }
-            },
+                },
+              ),
+            ),
           ),
         ),
       ),
