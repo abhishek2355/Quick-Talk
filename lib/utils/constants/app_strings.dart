@@ -13,3 +13,7 @@ const loginpagePasswordHintText = 'Enter Password';
 const loginpageEmailLableText = 'Email';
 const loginpagePasswordLableText = 'Password';
 const loginButtonText = 'Login';
+
+// HomePage text
+const homepageSearchbarText = 'Name or email';
+const homePageNoAnyConnection = 'No Connection Found';
