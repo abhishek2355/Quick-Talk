@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
           // We chack user exist
           if ((await APIs.userexist())) {
             // ignore: use_build_context_synchronously
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => const HomePage(),
@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
           } else {
             APIs.createUser().then(
               (value) => {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const HomePage(),
