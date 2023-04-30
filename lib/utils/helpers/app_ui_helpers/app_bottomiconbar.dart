@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
 
 class LoginIcons extends StatelessWidget {
-  final imageName;
-  final onTap;
+  final String imageName;
+  final VoidCallback onTap;
   const LoginIcons({
     super.key,
     required this.imageName,

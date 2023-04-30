@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:chat_app/Screens/home_page.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/auth/login_page.dart';
