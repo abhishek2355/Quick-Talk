@@ -7,10 +7,15 @@ import 'package:chat_app/auth/login_page.dart';
 import 'package:chat_app/helper/dialogs.dart';
 import 'package:chat_app/main.dart';
 import 'package:chat_app/model/chat_user.dart';
+import 'package:chat_app/utils/helpers/app_ui_helpers/app_profile_page_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
+import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
+
+import '../utils/helpers/app_ui_helpers/app_iconbutton.dart';
 
 class Profile extends StatefulWidget {
   final UserChat user;
@@ -28,214 +33,243 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    // MediaQuery veriable
+    var media = MediaQuery.of(context).size;
+
     return GestureDetector(
       onTap: (() => FocusScope.of(context).unfocus()),
       child: Scaffold(
-          // App Bar
-          appBar: AppBar(
-            // App Text
+        resizeToAvoidBottomInset: false,
+        // App Bar
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(media.height * app_heights.height70),
+          child: AppBar(
+            backgroundColor: const Color.fromARGB(255, 181, 227, 248),
+            iconTheme: IconThemeData(color: Colors.black, size: media.height * 28 / 926),
             title: Text(
-              "We Chat",
-              style: TextStyle(fontSize: media.height * 28 / 926),
+              app_strings.appName,
+              style: TextStyle(fontSize: media.height * 28 / 926, color: Colors.black, fontWeight: FontWeight.bold),
             ),
           ),
+        ),
 
-          // floating Action Button for add new user
-          floatingActionButton: FloatingActionButton.extended(
-            backgroundColor: Colors.redAccent,
+        // floating Action Button for add new user
+        floatingActionButton: SizedBox(
+          height: media.height * 50 / 926,
+          child: FloatingActionButton.extended(
+            backgroundColor: Colors.black38,
             onPressed: () async {
               // Show the progressbar
               Dialogs.showProgressBar(context);
 
               // Sign out from the app
-              await APIs.auth.signOut().then((value) async {
-                await GoogleSignIn().signOut().then((value) {
-                  // For hide the progressbar
-                  Navigator.pop(context);
+              await APIs.auth.signOut().then(
+                (value) async {
+                  await GoogleSignIn().signOut().then(
+                    (value) {
+                      // For hide the progressbar
+                      Navigator.pop(context);
 
-                  // For moving to the home screen
-                  Navigator.pop(context);
+                      // For moving to the home screen
+                      Navigator.pop(context);
 
-                  // For move to the login page
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
-                    ),
+                      // For move to the login page
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginPage(),
+                        ),
+                      );
+                    },
                   );
-                });
-              });
+                },
+              );
             },
-            icon: const Icon(Icons.logout),
-            label: const Text('Logout'),
-          ),
 
-          // Body of the project
-          body: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
+            // Icon fo floating action button
+            icon: Icon(Icons.logout, size: media.height * 28 / 926),
+
+            // Text of floating action button
+            label: Text(
+              'Logout',
+              style: TextStyle(fontSize: media.height * 21 / 926),
+            ),
+          ),
+        ),
+
+        // Body of the project
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
+            height: media.height,
+            width: media.width,
+
+            // Background color
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Colors.white,
+                  Color.fromARGB(255, 52, 174, 231),
+                ],
+              ),
+            ),
+
+            // Content of screen
             child: Form(
               key: _formkey,
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: media.width * .05,
+                  horizontal: media.width * 16 / 428,
                 ),
                 child: Column(
                   children: [
-                    // for adding some space
+                    // SizedBox with height 40
                     SizedBox(
-                      width: media.width,
-                      height: media.height * .03,
+                      height: media.height * 40 / 926,
                     ),
 
-                    Stack(
-                      children: [
-                        (_pickedImage != null)
-                            ? // User profile image
-                            ClipRRect(
-                                borderRadius: BorderRadius.circular(media.height * 90 / 926),
-                                child: Image.file(
-                                  File(_pickedImage!),
-                                  height: media.height * 180 / 926,
-                                  width: media.height * 180 / 926,
-                                  fit: BoxFit.cover,
+                    // Profile picture
+                    SizedBox(
+                      height: media.height * 180 / 926,
+                      child: Stack(
+                        children: [
+                          (_pickedImage != null)
+                              ? // User profile image
+                              ClipRRect(
+                                  borderRadius: BorderRadius.circular(media.height * 90 / 926),
+                                  child: Image.file(
+                                    File(_pickedImage!),
+                                    height: media.height * 180 / 926,
+                                    width: media.height * 180 / 926,
+                                    fit: BoxFit.fill,
+                                  ),
+                                )
+                              :
+                              // User profile image
+                              ClipRRect(
+                                  borderRadius: BorderRadius.circular(media.height * 90 / 926),
+                                  child: CachedNetworkImage(
+                                    height: media.height * 180 / 926,
+                                    width: media.height * 180 / 926,
+                                    fit: BoxFit.fill,
+                                    imageUrl: widget.user.image,
+                                    errorWidget: (context, url, error) => const CircleAvatar(child: Icon(CupertinoIcons.person)),
+                                  ),
                                 ),
-                              )
-                            :
-                            // User profile image
-                            ClipRRect(
-                                borderRadius: BorderRadius.circular(media.height * 90 / 926),
-                                child: CachedNetworkImage(
-                                  height: media.height * 180 / 926,
-                                  width: media.height * 180 / 926,
-                                  fit: BoxFit.cover,
-                                  imageUrl: widget.user.image,
-                                  errorWidget: (context, url, error) => const CircleAvatar(child: Icon(CupertinoIcons.person)),
+
+                          // Edit profile picture icon
+                          Positioned(
+                            bottom: 1,
+                            right: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 3,
+                                  color: Colors.white,
+                                ),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(
+                                    50,
+                                  ),
+                                ),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: const Offset(2, 4),
+                                    color: Colors.black.withOpacity(
+                                      0.3,
+                                    ),
+                                    blurRadius: 3,
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(media.height * 1 / 926),
+                                child: InkWell(
+                                  child: Icon(
+                                    Icons.add_a_photo,
+                                    color: Colors.black,
+                                    size: media.height * 28 / 926,
+                                  ),
+                                  onTap: () {
+                                    _showBottomSheet();
+                                  },
                                 ),
                               ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          left: media.width * 180 / 926,
-                          child: MaterialButton(
-                            height: media.height * 50 / 926,
-                            elevation: 1,
-                            onPressed: () {
-                              _showBottomSheet();
-                            },
-                            color: Colors.white,
-                            shape: const CircleBorder(),
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.blue,
-                              size: media.height * 25 / 926,
                             ),
                           ),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
 
-                    // for adding some space
+                    // SizedBox with height 30
                     SizedBox(
-                      height: media.height * .03,
+                      height: media.height * 30 / 926,
                     ),
 
+                    // Name of the user
+                    Text(
+                      widget.user.name,
+                      style: TextStyle(color: Colors.black87, fontSize: media.height * 28 / 926, fontWeight: FontWeight.bold),
+                    ),
+
+                    // Mail of user
                     Text(
                       widget.user.email,
-                      style: TextStyle(color: Colors.black54, fontSize: media.height * 25 / 926),
+                      style: TextStyle(color: Colors.black87, fontSize: media.height * 22 / 926),
                     ),
 
-                    // for adding some space
+                    // SizedBox with height 80
                     SizedBox(
-                      height: media.height * .05,
+                      height: media.height * 80 / 926,
                     ),
 
-                    SizedBox(
-                      height: media.height * 70 / 926,
-
-                      // Textformfield of name
-                      child: TextFormField(
-                        // Initial value
-                        initialValue: widget.user.name,
-                        // What to save
-                        onSaved: (val) => APIs.me.name = val ?? ' ',
-                        // Validate the entered value
-                        validator: (val) => (val != null && val.isNotEmpty) ? null : 'Enter Something',
-
-                        style: TextStyle(fontSize: media.height * 25 / 926),
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                            contentPadding: EdgeInsets.symmetric(horizontal: media.height * 10 / 926),
-                            prefixIcon: Icon(
-                              Icons.person,
-                              size: media.height * 25 / 926,
-                              color: Colors.blue,
-                            ),
-                            hintText: "Enter Name",
-                            label: const Text('Name')),
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: media.height * .02,
-                    ),
-
+                    // Name TextFormField
                     SizedBox(
                       height: media.height * 70 / 926,
-                      child: TextFormField(
-                        initialValue: widget.user.about,
-                        onSaved: (val) => APIs.me.about = val ?? ' ',
-                        validator: (val) => (val != null && val.isNotEmpty) ? null : 'Enter Something',
-                        style: TextStyle(fontSize: media.height * 25 / 926),
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                            contentPadding: EdgeInsets.symmetric(horizontal: media.height * 10 / 926),
-                            prefixIcon: Icon(
-                              Icons.info_outline,
-                              size: media.height * 25 / 926,
-                              color: Colors.blue,
-                            ),
-                            hintText: "Enter something",
-                            label: const Text('About')),
-                      ),
+                      child: ProfileChangeTextField(
+                          userprofileinfo: widget.user.name, hintText: 'Enter name', lableText: 'Name', onSaveInfo: (val) => APIs.me.name = val ?? ' '),
                     ),
+
+                    // SizedBox with height 20
                     SizedBox(
-                      height: media.height * .05,
+                      height: media.height * 20 / 926,
                     ),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        if (_formkey.currentState!.validate()) {
-                          // For save the new information
-                          _formkey.currentState!.save();
 
-                          // update the informatio on firebase
-                          APIs.updatedUserInformation();
-
-                          // Show the Snackbar of updated profile
-                          Dialogs.showSnackbar(context, 'Profile Successfully Updated');
-
-                          print('Okk');
-                        }
-                      },
-                      icon: Icon(
-                        Icons.update,
-                        size: media.height * 25 / 926,
+                    // About TextFormField
+                    SizedBox(
+                      height: media.height * 70 / 926,
+                      child: ProfileChangeTextField(
+                        userprofileinfo: widget.user.about,
+                        hintText: 'Enter About',
+                        lableText: 'About',
+                        onSaveInfo: (val) => APIs.me.about = val ?? ' ',
                       ),
-                      label: Text(
-                        'Update',
-                        style: TextStyle(fontSize: media.height * 25 / 926),
-                      ),
-                      style: ElevatedButton.styleFrom(shape: const StadiumBorder(), minimumSize: Size(media.width * .5, media.height * 0.06)),
-                    )
+                    ),
+
+                    // SizedBox with height 60
+                    SizedBox(
+                      height: media.height * 60 / 926,
+                    ),
+
+                    // Update Button
+                    IconsWithButton(formkey: _formkey, buttonIcon: Icons.history, buttonText: 'Update')
                   ],
                 ),
               ),
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 
+// Bottom Sheet Bar
   void _showBottomSheet() {
     showModalBottomSheet(
+      backgroundColor: const Color.fromARGB(255, 152, 218, 248),
       context: context,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
       builder: (_) {
@@ -268,12 +302,17 @@ class _ProfileState extends State<Profile> {
                       log('Image path : ${image.path}');
 
                       APIs.updateProfilePicture(File(_pickedImage!));
+                      // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white, fixedSize: Size(media.height * 100 / 926, media.height * 100 / 926), shape: const CircleBorder()),
-                  child: Image.asset('assets/Image/camera.png'),
+                      backgroundColor: const Color.fromARGB(255, 95, 196, 243),
+                      fixedSize: Size(media.height * 100 / 926, media.height * 100 / 926),
+                      shape: const CircleBorder()),
+                  child: Image.asset(
+                    'assets/Image/camera.png',
+                  ),
                 ),
                 ElevatedButton(
                     onPressed: () async {
@@ -296,7 +335,9 @@ class _ProfileState extends State<Profile> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, fixedSize: Size(media.height * 100 / 926, media.height * 100 / 926), shape: const CircleBorder()),
+                        backgroundColor: const Color.fromARGB(255, 95, 196, 243),
+                        fixedSize: Size(media.height * 100 / 926, media.height * 100 / 926),
+                        shape: const CircleBorder()),
                     child: Image.asset('assets/Image/photo.png'))
               ],
             ),
