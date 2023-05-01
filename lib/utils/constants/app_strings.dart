@@ -17,3 +17,12 @@ const loginButtonText = 'Login';
 // HomePage text
 const homepageSearchbarText = 'Name or email';
 const homePageNoAnyConnection = 'No Connection Found';
+
+// ProfilePage
+const profilePageLogoutText = 'Logout';
+const profilePageNameHintText = 'Enter name';
+const profilePageNameLableText = 'Name';
+const profilePageAboutHintText = 'Enter About';
+const profilePageAboutLableText = 'About';
+const profileUpdateButtonText = 'Update';
+const profilebottomSheetText = 'Pick profile Photo';

@@ -14,6 +14,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
 import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
+import 'package:chat_app/utils/constants/app_widths.dart' as app_widths;
 
 import '../utils/helpers/app_ui_helpers/app_iconbutton.dart';
 
@@ -45,17 +46,17 @@ class _ProfileState extends State<Profile> {
           preferredSize: Size.fromHeight(media.height * app_heights.height70),
           child: AppBar(
             backgroundColor: const Color.fromARGB(255, 181, 227, 248),
-            iconTheme: IconThemeData(color: Colors.black, size: media.height * 28 / 926),
+            iconTheme: IconThemeData(color: Colors.black, size: media.height * app_heights.height28),
             title: Text(
               app_strings.appName,
-              style: TextStyle(fontSize: media.height * 28 / 926, color: Colors.black, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: media.height * app_heights.height28, color: Colors.black, fontWeight: FontWeight.bold),
             ),
           ),
         ),
 
         // floating Action Button for add new user
         floatingActionButton: SizedBox(
-          height: media.height * 50 / 926,
+          height: media.height * app_heights.height50,
           child: FloatingActionButton.extended(
             backgroundColor: Colors.black38,
             onPressed: () async {
@@ -86,13 +87,13 @@ class _ProfileState extends State<Profile> {
               );
             },
 
-            // Icon fo floating action button
-            icon: Icon(Icons.logout, size: media.height * 28 / 926),
+            // Icon for floating action button
+            icon: Icon(Icons.logout, size: media.height * app_heights.height28),
 
             // Text of floating action button
             label: Text(
-              'Logout',
-              style: TextStyle(fontSize: media.height * 21 / 926),
+              app_strings.profilePageLogoutText,
+              style: TextStyle(fontSize: media.height * app_heights.height21),
             ),
           ),
         ),
@@ -121,38 +122,38 @@ class _ProfileState extends State<Profile> {
               key: _formkey,
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: media.width * 16 / 428,
+                  horizontal: media.width * app_widths.width16,
                 ),
                 child: Column(
                   children: [
                     // SizedBox with height 40
                     SizedBox(
-                      height: media.height * 40 / 926,
+                      height: media.height * app_heights.height40,
                     ),
 
                     // Profile picture
                     SizedBox(
-                      height: media.height * 180 / 926,
+                      height: media.height * app_heights.height180,
                       child: Stack(
                         children: [
                           (_pickedImage != null)
                               ? // User profile image
                               ClipRRect(
-                                  borderRadius: BorderRadius.circular(media.height * 90 / 926),
+                                  borderRadius: BorderRadius.circular(media.height * app_heights.height90),
                                   child: Image.file(
                                     File(_pickedImage!),
-                                    height: media.height * 180 / 926,
-                                    width: media.height * 180 / 926,
+                                    height: media.height * app_heights.height180,
+                                    width: media.height * app_heights.height180,
                                     fit: BoxFit.fill,
                                   ),
                                 )
                               :
                               // User profile image
                               ClipRRect(
-                                  borderRadius: BorderRadius.circular(media.height * 90 / 926),
+                                  borderRadius: BorderRadius.circular(media.height * app_heights.height90),
                                   child: CachedNetworkImage(
-                                    height: media.height * 180 / 926,
-                                    width: media.height * 180 / 926,
+                                    height: media.height * app_heights.height180,
+                                    width: media.height * app_heights.height180,
                                     fit: BoxFit.fill,
                                     imageUrl: widget.user.image,
                                     errorWidget: (context, url, error) => const CircleAvatar(child: Icon(CupertinoIcons.person)),
@@ -186,12 +187,12 @@ class _ProfileState extends State<Profile> {
                                 ],
                               ),
                               child: Padding(
-                                padding: EdgeInsets.all(media.height * 1 / 926),
+                                padding: EdgeInsets.all(media.height * app_heights.height1),
                                 child: InkWell(
                                   child: Icon(
                                     Icons.add_a_photo,
                                     color: Colors.black,
-                                    size: media.height * 28 / 926,
+                                    size: media.height * app_heights.height28,
                                   ),
                                   onTap: () {
                                     _showBottomSheet();
@@ -206,56 +207,59 @@ class _ProfileState extends State<Profile> {
 
                     // SizedBox with height 30
                     SizedBox(
-                      height: media.height * 30 / 926,
+                      height: media.height * app_heights.height30,
                     ),
 
                     // Name of the user
                     Text(
                       widget.user.name,
-                      style: TextStyle(color: Colors.black87, fontSize: media.height * 28 / 926, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Colors.black87, fontSize: media.height * app_heights.height28, fontWeight: FontWeight.bold),
                     ),
 
                     // Mail of user
                     Text(
                       widget.user.email,
-                      style: TextStyle(color: Colors.black87, fontSize: media.height * 22 / 926),
+                      style: TextStyle(color: Colors.black87, fontSize: media.height * app_heights.height22),
                     ),
 
                     // SizedBox with height 80
                     SizedBox(
-                      height: media.height * 80 / 926,
+                      height: media.height * app_heights.height80,
                     ),
 
                     // Name TextFormField
                     SizedBox(
-                      height: media.height * 70 / 926,
+                      height: media.height * app_heights.height70,
                       child: ProfileChangeTextField(
-                          userprofileinfo: widget.user.name, hintText: 'Enter name', lableText: 'Name', onSaveInfo: (val) => APIs.me.name = val ?? ' '),
+                          userprofileinfo: widget.user.name,
+                          hintText: app_strings.profilePageNameHintText,
+                          lableText: app_strings.profilePageNameLableText,
+                          onSaveInfo: (val) => APIs.me.name = val ?? ' '),
                     ),
 
                     // SizedBox with height 20
                     SizedBox(
-                      height: media.height * 20 / 926,
+                      height: media.height * app_heights.height20,
                     ),
 
                     // About TextFormField
                     SizedBox(
-                      height: media.height * 70 / 926,
+                      height: media.height * app_heights.height70,
                       child: ProfileChangeTextField(
                         userprofileinfo: widget.user.about,
-                        hintText: 'Enter About',
-                        lableText: 'About',
+                        hintText: app_strings.profilePageAboutHintText,
+                        lableText: app_strings.profilePageAboutLableText,
                         onSaveInfo: (val) => APIs.me.about = val ?? ' ',
                       ),
                     ),
 
                     // SizedBox with height 60
                     SizedBox(
-                      height: media.height * 60 / 926,
+                      height: media.height * app_heights.height60,
                     ),
 
                     // Update Button
-                    IconsWithButton(formkey: _formkey, buttonIcon: Icons.history, buttonText: 'Update')
+                    IconsWithButton(formkey: _formkey, buttonIcon: Icons.history, buttonText: app_strings.profileUpdateButtonText)
                   ],
                 ),
               ),
@@ -274,16 +278,16 @@ class _ProfileState extends State<Profile> {
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
       builder: (_) {
         return ListView(
-          padding: EdgeInsets.only(top: media.height * 30 / 926, bottom: media.height * 30 / 926),
+          padding: EdgeInsets.only(top: media.height * app_heights.height30, bottom: media.height * app_heights.height30),
           shrinkWrap: true,
           children: [
             Text(
-              'Pick profile Photo',
+              app_strings.profilebottomSheetText,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: media.height * 30 / 926, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: media.height * app_heights.height30, fontWeight: FontWeight.bold),
             ),
             SizedBox(
-              height: media.height * 30 / 926,
+              height: media.height * app_heights.height30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -298,9 +302,6 @@ class _ProfileState extends State<Profile> {
                         _pickedImage = image.path;
                       });
 
-                      // Call function for update the image in database
-                      log('Image path : ${image.path}');
-
                       APIs.updateProfilePicture(File(_pickedImage!));
                       // ignore: use_build_context_synchronously
                       Navigator.pop(context);
@@ -308,10 +309,10 @@ class _ProfileState extends State<Profile> {
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 95, 196, 243),
-                      fixedSize: Size(media.height * 100 / 926, media.height * 100 / 926),
+                      fixedSize: Size(media.height * app_heights.height100, media.height * app_heights.height100),
                       shape: const CircleBorder()),
                   child: Image.asset(
-                    'assets/Image/camera.png',
+                    '${app_strings.imagePath}camera.png',
                   ),
                 ),
                 ElevatedButton(
@@ -326,9 +327,6 @@ class _ProfileState extends State<Profile> {
                           },
                         );
 
-                        // Call function for update the image in database
-                        log('Image path : ${image.path}');
-
                         APIs.updateProfilePicture(File(_pickedImage!));
                         // ignore: use_build_context_synchronously
                         Navigator.pop(context);
@@ -336,9 +334,9 @@ class _ProfileState extends State<Profile> {
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 95, 196, 243),
-                        fixedSize: Size(media.height * 100 / 926, media.height * 100 / 926),
+                        fixedSize: Size(media.height * app_heights.height100, media.height * app_heights.height100),
                         shape: const CircleBorder()),
-                    child: Image.asset('assets/Image/photo.png'))
+                    child: Image.asset('${app_strings.imagePath}photo.png'))
               ],
             ),
           ],
