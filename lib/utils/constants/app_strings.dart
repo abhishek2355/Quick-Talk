@@ -26,3 +26,7 @@ const profilePageAboutHintText = 'Enter About';
 const profilePageAboutLableText = 'About';
 const profileUpdateButtonText = 'Update';
 const profilebottomSheetText = 'Pick profile Photo';
+
+// Chatting screen
+const chattingScreenNoConnectionText = 'Say Hii 👋';
+const chattingScreenInputHintText = 'Type Something...';
