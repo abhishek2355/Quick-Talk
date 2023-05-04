@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:chat_app/helper/chat_message.dart';
-import 'package:chat_app/main.dart';
+import 'package:chat_app/utils/helpers/chat_message.dart';
 import 'package:chat_app/model/chat_user.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,9 @@ import 'package:flutter/material.dart';
 import '../api/apis.dart';
 import '../helper/chattingpage_appbar.dart';
 import '../model/message.dart';
+import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
+import 'package:chat_app/utils/constants/app_widths.dart' as app_widths;
+import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
 
 class ChattingPage extends StatefulWidget {
   final UserChat user;
@@ -29,7 +31,7 @@ class _ChattingPageState extends State<ChattingPage> {
 
   @override
   Widget build(BuildContext context) {
-    media = MediaQuery.of(context).size;
+    var media = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -47,15 +49,32 @@ class _ChattingPageState extends State<ChattingPage> {
             }
           },
           child: Scaffold(
-              appBar: PreferredSize(
-                preferredSize: Size.fromHeight(media.height * 70 / 926),
-                child: AppBar(
-                  automaticallyImplyLeading: false,
-                  flexibleSpace: ChattingAppbar(widget: widget),
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(media.height * app_heights.height70),
+              child: AppBar(
+                backgroundColor: const Color.fromARGB(255, 181, 227, 248),
+                automaticallyImplyLeading: false,
+                flexibleSpace: ChattingAppbar(widget: widget),
+              ),
+            ),
+            body: Container(
+              // background color
+              height: media.height,
+              width: media.width,
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                    Colors.purple,
+                    Colors.indigo,
+                  ],
                 ),
               ),
-              backgroundColor: const Color.fromARGB(255, 221, 236, 248),
-              body: Column(
+
+              // Main Body of screen
+              child: Column(
                 children: [
                   Expanded(
                     child: StreamBuilder(
@@ -88,8 +107,8 @@ class _ChattingPageState extends State<ChattingPage> {
                             } else {
                               return Center(
                                 child: Text(
-                                  "Say Hii 👋",
-                                  style: TextStyle(fontSize: media.height * 25 / 926, letterSpacing: 2),
+                                  app_strings.chattingScreenNoConnectionText,
+                                  style: TextStyle(fontSize: media.height * app_heights.height25, letterSpacing: 2),
                                 ),
                               );
                             }
@@ -97,8 +116,10 @@ class _ChattingPageState extends State<ChattingPage> {
                       },
                     ),
                   ),
+
+                  // input keybord
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: media.height * 0.01, horizontal: media.height * 0.001),
+                    padding: EdgeInsets.symmetric(vertical: media.height * app_heights.height2, horizontal: media.width * app_widths.width2),
                     child: Row(
                       children: [
                         Expanded(
@@ -116,7 +137,7 @@ class _ChattingPageState extends State<ChattingPage> {
                                   icon: Icon(
                                     Icons.emoji_emotions,
                                     color: Colors.blueAccent,
-                                    size: media.height * 30 / 926,
+                                    size: media.height * app_heights.height30,
                                   ),
                                 ),
                                 Expanded(
@@ -130,9 +151,11 @@ class _ChattingPageState extends State<ChattingPage> {
                                         }
                                       });
                                     },
-                                    style: TextStyle(fontSize: media.height * 25 / 926),
+                                    style: TextStyle(fontSize: media.height * app_heights.height25),
                                     decoration: const InputDecoration(
-                                        hintText: 'Type Something...', hintStyle: TextStyle(color: Colors.black45), border: InputBorder.none),
+                                        hintText: app_strings.chattingScreenInputHintText,
+                                        hintStyle: TextStyle(color: Colors.black45),
+                                        border: InputBorder.none),
                                   ),
                                 ),
                                 IconButton(
@@ -140,7 +163,7 @@ class _ChattingPageState extends State<ChattingPage> {
                                   icon: Icon(
                                     Icons.image,
                                     color: Colors.blueAccent,
-                                    size: media.height * 30 / 926,
+                                    size: media.height * app_heights.height30,
                                   ),
                                 ),
                                 IconButton(
@@ -148,22 +171,22 @@ class _ChattingPageState extends State<ChattingPage> {
                                   icon: Icon(
                                     Icons.camera_alt_rounded,
                                     color: Colors.blueAccent,
-                                    size: media.height * 30 / 926,
+                                    size: media.height * app_heights.height30,
                                   ),
                                 ),
-                                SizedBox(
-                                  width: media.width * 0.02,
-                                )
                               ],
                             ),
                           ),
                         ),
                         MaterialButton(
-                          color: Colors.green,
+                          color: Colors.blue,
                           shape: const CircleBorder(),
                           minWidth: 0,
                           padding: EdgeInsets.only(
-                              top: media.height * 10 / 926, bottom: media.height * 10 / 926, left: media.height * 10 / 926, right: media.height * 5 / 926),
+                              top: media.height * app_heights.height10,
+                              bottom: media.height * app_heights.height10,
+                              left: media.height * app_heights.height10,
+                              right: media.height * app_heights.height5),
                           onPressed: () {
                             if (textController.text.isNotEmpty) {
                               APIs.sendMessage(widget.user, textController.text);
@@ -173,7 +196,7 @@ class _ChattingPageState extends State<ChattingPage> {
                           child: Icon(
                             Icons.send,
                             color: Colors.white,
-                            size: media.height * 35 / 926,
+                            size: media.height * app_heights.height30,
                           ),
                         )
                       ],
@@ -181,7 +204,7 @@ class _ChattingPageState extends State<ChattingPage> {
                   ),
                   if (isShowEmoji)
                     SizedBox(
-                      height: media.height * 300 / 926,
+                      height: media.height * app_heights.height300,
                       child: EmojiPicker(
                         textEditingController: textController,
                         config: Config(
@@ -192,7 +215,9 @@ class _ChattingPageState extends State<ChattingPage> {
                       ),
                     )
                 ],
-              )),
+              ),
+            ),
+          ),
         ),
       ),
     );
