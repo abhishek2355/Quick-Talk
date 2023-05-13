@@ -7,6 +7,7 @@ const double height18 = 18 / 926;
 const double height20 = 20 / 926;
 const double height21 = 21 / 926;
 const double height22 = 22 / 926;
+const double height23 = 23 / 926;
 const double height24 = 24 / 926;
 const double height25 = 25 / 926;
 const double height28 = 28 / 926;

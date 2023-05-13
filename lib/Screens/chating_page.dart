@@ -6,7 +6,7 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 
 import '../api/apis.dart';
-import '../helper/chattingpage_appbar.dart';
+import '../utils/helpers/app_ui_helpers/chattingpage_appbar.dart';
 import '../model/message.dart';
 import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
 import 'package:chat_app/utils/constants/app_widths.dart' as app_widths;
