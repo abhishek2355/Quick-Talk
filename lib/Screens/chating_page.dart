@@ -4,6 +4,7 @@ import 'package:chat_app/utils/helpers/chat_message.dart';
 import 'package:chat_app/model/chat_user.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../api/apis.dart';
 import '../utils/helpers/app_ui_helpers/chattingpage_appbar.dart';
@@ -167,7 +168,14 @@ class _ChattingPageState extends State<ChattingPage> {
                                   ),
                                 ),
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    final ImagePicker picker = ImagePicker();
+                                    // Pick an image.
+                                    final XFile? image = await picker.pickImage(source: ImageSource.camera, imageQuality: 70);
+                                    if (image != null) {
+                                      await APIs.sendChatImage(widget.user, File(image.path));
+                                    }
+                                  },
                                   icon: Icon(
                                     Icons.camera_alt_rounded,
                                     color: Colors.blueAccent,
@@ -189,7 +197,7 @@ class _ChattingPageState extends State<ChattingPage> {
                               right: media.height * app_heights.height5),
                           onPressed: () {
                             if (textController.text.isNotEmpty) {
-                              APIs.sendMessage(widget.user, textController.text);
+                              APIs.sendMessage(widget.user, textController.text, Type.text);
                               textController.text = '';
                             }
                           },

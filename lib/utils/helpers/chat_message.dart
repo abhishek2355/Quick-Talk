@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/main.dart';
 import 'package:flutter/material.dart';
@@ -37,13 +38,25 @@ class _MessageCardState extends State<MessageCard> {
             decoration: BoxDecoration(
                 color: Colors.blue.shade100,
                 border: Border.all(color: Colors.black),
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30), bottomRight: Radius.circular(30))),
-            padding: EdgeInsets.all(media.height * app_heights.height25),
+                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(30), topRight: Radius.circular(30), bottomRight: Radius.circular(30))),
+            padding: EdgeInsets.all((widget.messages.type == Type.text) ? media.height * app_heights.height20 : media.height * app_heights.height10),
             margin: EdgeInsets.symmetric(horizontal: media.width * app_widths.width16, vertical: media.height * app_heights.height10),
-            child: Text(
-              widget.messages.msg,
-              style: TextStyle(fontSize: media.height * app_heights.height25, color: Colors.black),
-            ),
+            child: (widget.messages.type == Type.text)
+                ? Text(
+                    widget.messages.msg,
+                    style: TextStyle(fontSize: media.height * app_heights.height25, color: Colors.black),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(media.height * app_heights.height30),
+                    child: CachedNetworkImage(
+                        imageUrl: widget.messages.msg,
+                        placeholder: (context, url) => const CircularProgressIndicator(strokeWidth: 2),
+                        errorWidget: (context, url, error) => Icon(
+                              Icons.image,
+                              size: media.height * app_heights.height70,
+                              color: Colors.blue,
+                            )),
+                  ),
           ),
         ),
 
@@ -97,19 +110,30 @@ class _MessageCardState extends State<MessageCard> {
           ],
         ),
         Flexible(
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.pink[50],
-                border: Border.all(color: Colors.black),
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30), bottomLeft: Radius.circular(30))),
-            padding: EdgeInsets.all(media.height * app_heights.height25),
-            margin: EdgeInsets.symmetric(horizontal: media.width * app_widths.width10, vertical: media.height * app_heights.height10),
-            child: Text(
-              widget.messages.msg,
-              style: TextStyle(fontSize: media.height * app_heights.height25, color: Colors.black),
-            ),
-          ),
-        ),
+            child: Container(
+          decoration: BoxDecoration(
+              color: Colors.pink[50],
+              border: Border.all(color: Colors.black),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), bottomRight: Radius.circular(30), bottomLeft: Radius.circular(30))),
+          padding: EdgeInsets.all(widget.messages.type == Type.text ? media.height * app_heights.height20 : media.height * app_heights.height10),
+          margin: EdgeInsets.symmetric(horizontal: media.width * app_widths.width10, vertical: media.height * app_heights.height10),
+          child: widget.messages.type == Type.text
+              ? Text(
+                  widget.messages.msg,
+                  style: TextStyle(fontSize: media.height * app_heights.height25, color: Colors.black),
+                )
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(media.height * app_heights.height30),
+                  child: CachedNetworkImage(
+                      imageUrl: widget.messages.msg,
+                      placeholder: (context, url) => const CircularProgressIndicator(strokeWidth: 2),
+                      errorWidget: (context, url, error) => Icon(
+                            Icons.image,
+                            size: media.height * app_heights.height70,
+                            color: Colors.blue,
+                          )),
+                ),
+        )),
       ],
     );
   }
