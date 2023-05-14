@@ -30,6 +30,9 @@ class _ChattingPageState extends State<ChattingPage> {
 
   bool isShowEmoji = false;
 
+  // For show progressbar indicator at the time of uploding images.
+  bool isUploaded = false;
+
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
@@ -118,6 +121,15 @@ class _ChattingPageState extends State<ChattingPage> {
                     ),
                   ),
 
+                  if (isUploaded)
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: media.width * 16 / 428, vertical: media.height * 5 / 926),
+                        child: const CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    ),
+
                   // input keybord
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: media.height * app_heights.height2, horizontal: media.width * app_widths.width2),
@@ -160,7 +172,22 @@ class _ChattingPageState extends State<ChattingPage> {
                                   ),
                                 ),
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    final ImagePicker picker = ImagePicker();
+                                    // Pick an image.
+                                    final List<XFile> images = await picker.pickMultiImage(imageQuality: 70);
+                                    if (images.isNotEmpty) {
+                                      for (var i in images) {
+                                        setState(() {
+                                          isUploaded = true;
+                                        });
+                                        await APIs.sendChatImage(widget.user, File(i.path));
+                                        setState(() {
+                                          isUploaded = false;
+                                        });
+                                      }
+                                    }
+                                  },
                                   icon: Icon(
                                     Icons.image,
                                     color: Colors.blueAccent,
@@ -173,7 +200,13 @@ class _ChattingPageState extends State<ChattingPage> {
                                     // Pick an image.
                                     final XFile? image = await picker.pickImage(source: ImageSource.camera, imageQuality: 70);
                                     if (image != null) {
+                                      setState(() {
+                                        isUploaded = true;
+                                      });
                                       await APIs.sendChatImage(widget.user, File(image.path));
+                                      setState(() {
+                                        isUploaded = false;
+                                      });
                                     }
                                   },
                                   icon: Icon(
