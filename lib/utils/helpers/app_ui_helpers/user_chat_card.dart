@@ -71,6 +71,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                     children: [
                       Text(
                         widget.user.name,
+                        maxLines: 1,
                         style: TextStyle(fontSize: media.height * app_heights.height24),
                       ),
                       SizedBox(
