@@ -65,6 +65,16 @@ class APIs {
     await firestore.collection('user').doc(user.uid).update({'name': me.name, 'about': me.about});
   }
 
+  // For getting specific user information
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(UserChat chatUser) {
+    return firestore.collection('user').where('id', isEqualTo: chatUser.id).snapshots();
+  }
+
+  // Update online or last active status of user
+  static Future<void> updateActiveStatus(bool isOnline) async {
+    firestore.collection('user').doc(user.uid).update({'is_online': isOnline, 'last_active': DateTime.now().millisecondsSinceEpoch.toString()});
+  }
+
   // Update profile picture of user
   static Future<void> updateProfilePicture(File file) async {
     // getting image file path

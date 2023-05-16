@@ -4,6 +4,7 @@ import 'package:chat_app/main.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/user_chat_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../model/chat_user.dart';
 import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
@@ -29,6 +30,17 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     APIs.getSelfInfo();
+
+    // for setting users status to active
+    APIs.updateActiveStatus(true);
+
+    // For showing status online or offline
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      if (message.toString().contains('resume')) APIs.updateActiveStatus(true);
+      if (message.toString().contains('pause')) APIs.updateActiveStatus(false);
+
+      return Future.value(message);
+    });
   }
 
   @override
