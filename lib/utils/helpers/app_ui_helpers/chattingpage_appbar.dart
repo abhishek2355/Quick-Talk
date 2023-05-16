@@ -85,7 +85,7 @@ class ChattingAppbar extends StatelessWidget {
                                 ? 'online'
                                 : MyDateUtil.getLastActiveTime(context: context, lastActive: list[0].lastActive)
                             : MyDateUtil.getLastActiveTime(context: context, lastActive: widget.user.lastActive),
-                        style: const TextStyle(color: Colors.black54, fontSize: 10),
+                        style: TextStyle(color: Colors.black54, fontSize: media.height * 18 / 926),
                       ),
                     )
                   ],

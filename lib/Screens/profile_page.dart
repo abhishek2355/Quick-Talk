@@ -8,6 +8,7 @@ import 'package:chat_app/helper/dialogs.dart';
 import 'package:chat_app/main.dart';
 import 'package:chat_app/model/chat_user.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/app_profile_page_textfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -63,6 +64,8 @@ class _ProfileState extends State<Profile> {
               // Show the progressbar
               Dialogs.showProgressBar(context);
 
+              await APIs.updateActiveStatus(false);
+
               // Sign out from the app
               await APIs.auth.signOut().then(
                 (value) async {
@@ -73,6 +76,8 @@ class _ProfileState extends State<Profile> {
 
                       // For moving to the home screen
                       Navigator.pop(context);
+
+                      APIs.auth = FirebaseAuth.instance;
 
                       // For move to the login page
                       Navigator.pushReplacement(
