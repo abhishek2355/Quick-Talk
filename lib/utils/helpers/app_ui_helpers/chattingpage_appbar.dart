@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chat_app/Screens/view_profile.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/model/chat_user.dart';
-import 'package:chat_app/model/message.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/my_date_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,13 @@ class ChattingAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ViewUserProfile(user: widget.user),
+            ));
+      },
       child: StreamBuilder(
         stream: APIs.getUserInfo(widget.user),
         builder: (context, snapshot) {
