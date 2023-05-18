@@ -31,9 +31,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     APIs.getSelfInfo();
 
-    // for setting users status to active
-    APIs.updateActiveStatus(true);
-
     // For showing status online or offline
     SystemChannels.lifecycle.setMessageHandler((message) {
       if (APIs.auth.currentUser != null) {
@@ -54,13 +51,14 @@ class _HomePageState extends State<HomePage> {
         FocusScope.of(context).unfocus();
       },
       child: WillPopScope(
-        onWillPop: () {
+        onWillPop: () async {
           if (_isSearch) {
             setState(() {
               _isSearch = !_isSearch;
             });
             return Future.value(false);
           } else {
+            await APIs.updateActiveStatus(false);
             return Future.value(true);
           }
         },
