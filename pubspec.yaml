@@ -67,6 +67,15 @@ dependencies:
   # Animated text kit
   animated_text_kit: ^4.2.2
 
+  # For accessing firebase messaging  (push notifications)
+  firebase_messaging: ^14.6.1
+
+  # For call REST API
+  http: ^0.13.6
+
+  # for creating notification channel
+  flutter_notification_channel: ^2.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
