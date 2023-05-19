@@ -207,4 +207,13 @@ class APIs {
     final imageUrl = await ref.getDownloadURL();
     await sendMessage(chatUser, imageUrl, Type.image);
   }
+
+  // for delete the message from the chat
+  static Future<void> deleteMessage(Messages message) async {
+    firestore.collection('chats/${getConversationID(message.toId)}/message/').doc(message.sent).delete();
+
+    if (message.type == Type.image) {
+      await imagestorage.refFromURL(message.msg).delete();
+    }
+  }
 }
