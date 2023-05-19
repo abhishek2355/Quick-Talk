@@ -2,13 +2,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/main.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/app_bottomSheet.dart';
+import 'package:chat_app/utils/helpers/app_ui_helpers/app_dialogbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../model/message.dart';
 import '../../helper/send_time.dart';
 import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
 import 'package:chat_app/utils/constants/app_widths.dart' as app_widths;
 import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
+
+import 'app_ui_helpers/my_date_utils.dart';
 
 class MessageCard extends StatefulWidget {
   final Messages messages;
@@ -174,7 +178,12 @@ class _MessageCardState extends State<MessageCard> {
                       size: media.height * 30 / 926,
                     ),
                     name: 'Copy',
-                    onTap: () {},
+                    onTap: () async {
+                      await Clipboard.setData(ClipboardData(text: widget.messages.msg)).then((value) {
+                        // For close the bottomsheet
+                        Navigator.pop(context);
+                      });
+                    },
                   )
                 : OptionItemOfBottomSheet(
                     icon: Icon(
@@ -213,7 +222,11 @@ class _MessageCardState extends State<MessageCard> {
                   size: media.height * 30 / 926,
                 ),
                 name: 'Delete',
-                onTap: () {},
+                onTap: () {
+                  APIs.deleteMessage(widget.messages).then((value) {
+                    Navigator.pop(context);
+                  });
+                },
               ),
 
             if (isMe)
@@ -230,7 +243,7 @@ class _MessageCardState extends State<MessageCard> {
                 color: Colors.grey,
                 size: media.height * 30 / 926,
               ),
-              name: 'Sent at: ',
+              name: 'Sent at: ${MyDateUtil.getMessageTime(context: context, time: widget.messages.sent)}',
               onTap: () {},
             ),
 
@@ -241,7 +254,9 @@ class _MessageCardState extends State<MessageCard> {
                 color: Colors.blue,
                 size: media.height * 30 / 926,
               ),
-              name: 'Read at: ',
+              name: widget.messages.read.isEmpty
+                  ? 'Read at: Not available yet'
+                  : 'Read at: ${MyDateUtil.getMessageTime(context: context, time: widget.messages.sent)}',
               onTap: () {},
             ),
           ],
