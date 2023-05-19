@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:chat_app/Screens/home_page.dart';
 import 'package:chat_app/api/apis.dart';
-import 'package:chat_app/helper/dialogs.dart';
+import 'package:chat_app/utils/helpers/app_ui_helpers/app_dialogbar.dart';
 import 'package:chat_app/main.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/app_bottomiconbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';

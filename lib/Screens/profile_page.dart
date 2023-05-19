@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/auth/login_page.dart';
-import 'package:chat_app/helper/dialogs.dart';
 import 'package:chat_app/main.dart';
 import 'package:chat_app/model/chat_user.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/app_profile_page_textfield.dart';
@@ -16,6 +15,7 @@ import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
 import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
 import 'package:chat_app/utils/constants/app_widths.dart' as app_widths;
 
+import '../utils/helpers/app_ui_helpers/app_dialogbar.dart';
 import '../utils/helpers/app_ui_helpers/app_iconbutton.dart';
 
 class Profile extends StatefulWidget {

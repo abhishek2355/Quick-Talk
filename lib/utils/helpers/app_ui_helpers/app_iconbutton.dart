@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../api/apis.dart';
-import '../../../helper/dialogs.dart';
+import 'app_dialogbar.dart';
 
 class IconsWithButton extends StatelessWidget {
   const IconsWithButton({
