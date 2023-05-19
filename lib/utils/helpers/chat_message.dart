@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/main.dart';
+import 'package:chat_app/utils/helpers/app_ui_helpers/app_bottomSheet.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/message.dart';
 import '../../helper/send_time.dart';
 import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
 import 'package:chat_app/utils/constants/app_widths.dart' as app_widths;
+import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
 
 class MessageCard extends StatefulWidget {
   final Messages messages;
@@ -22,7 +24,14 @@ class _MessageCardState extends State<MessageCard> {
   // reciver and sender messages
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
-    return (APIs.user.uid == widget.messages.fromId) ? _greenMessageCard() : _blueMessageCard();
+    bool isMe = APIs.user.uid == widget.messages.fromId;
+
+    return InkWell(
+      onLongPress: () {
+        _showBottomSheet(isMe);
+      },
+      child: (isMe) ? _greenMessageCard() : _blueMessageCard(),
+    );
   }
 
   // Another user messages
@@ -135,6 +144,109 @@ class _MessageCardState extends State<MessageCard> {
                 ),
         )),
       ],
+    );
+  }
+
+// Bottom Sheet Bar
+  void _showBottomSheet(bool isMe) {
+    showModalBottomSheet(
+      backgroundColor: const Color.fromARGB(255, 152, 218, 248),
+      context: context,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+      builder: (_) {
+        return ListView(
+          padding: EdgeInsets.only(top: media.height * app_heights.height30, bottom: media.height * app_heights.height30),
+          shrinkWrap: true,
+          children: [
+            // Black Divider
+            Container(
+              height: media.height * 4 / 926,
+              margin: EdgeInsets.symmetric(horizontal: media.width * 160 / 428),
+              decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(8)),
+            ),
+
+            // Copy Option
+            widget.messages.type == Type.text
+                ? OptionItemOfBottomSheet(
+                    icon: Icon(
+                      Icons.copy_all_rounded,
+                      color: Colors.black,
+                      size: media.height * 30 / 926,
+                    ),
+                    name: 'Copy',
+                    onTap: () {},
+                  )
+                : OptionItemOfBottomSheet(
+                    icon: Icon(
+                      Icons.download_rounded,
+                      color: Colors.black,
+                      size: media.height * 30 / 926,
+                    ),
+                    name: 'Save Image',
+                    onTap: () {},
+                  ),
+
+            Divider(
+              color: Colors.black,
+              endIndent: media.width * 16 / 428,
+              indent: media.width * 16 / 428,
+            ),
+
+            // Edit Option
+            if (widget.messages.type == Type.text && isMe)
+              OptionItemOfBottomSheet(
+                icon: Icon(
+                  Icons.edit,
+                  color: Colors.black,
+                  size: media.height * 30 / 926,
+                ),
+                name: 'Edit',
+                onTap: () {},
+              ),
+
+            // Delete Option
+            if (isMe)
+              OptionItemOfBottomSheet(
+                icon: Icon(
+                  Icons.delete_outline_rounded,
+                  color: Colors.red,
+                  size: media.height * 30 / 926,
+                ),
+                name: 'Delete',
+                onTap: () {},
+              ),
+
+            if (isMe)
+              Divider(
+                color: Colors.black,
+                endIndent: media.width * 16 / 428,
+                indent: media.width * 16 / 428,
+              ),
+
+            // Send time
+            OptionItemOfBottomSheet(
+              icon: Icon(
+                Icons.remove_red_eye,
+                color: Colors.grey,
+                size: media.height * 30 / 926,
+              ),
+              name: 'Sent at: ',
+              onTap: () {},
+            ),
+
+            // Read time
+            OptionItemOfBottomSheet(
+              icon: Icon(
+                Icons.remove_red_eye,
+                color: Colors.blue,
+                size: media.height * 30 / 926,
+              ),
+              name: 'Read at: ',
+              onTap: () {},
+            ),
+          ],
+        );
+      },
     );
   }
 }
