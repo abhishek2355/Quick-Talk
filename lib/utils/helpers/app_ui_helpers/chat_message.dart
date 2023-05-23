@@ -6,13 +6,13 @@ import 'package:chat_app/utils/helpers/app_ui_helpers/app_dialogbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../model/message.dart';
-import '../../helper/send_time.dart';
+import '../../../model/message.dart';
+import '../../../helper/send_time.dart';
 import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
 import 'package:chat_app/utils/constants/app_widths.dart' as app_widths;
 import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
 
-import 'app_ui_helpers/my_date_utils.dart';
+import 'my_date_utils.dart';
 
 class MessageCard extends StatefulWidget {
   final Messages messages;
@@ -200,18 +200,6 @@ class _MessageCardState extends State<MessageCard> {
               endIndent: media.width * 16 / 428,
               indent: media.width * 16 / 428,
             ),
-
-            // Edit Option
-            if (widget.messages.type == Type.text && isMe)
-              OptionItemOfBottomSheet(
-                icon: Icon(
-                  Icons.edit,
-                  color: Colors.black,
-                  size: media.height * 30 / 926,
-                ),
-                name: 'Edit',
-                onTap: () {},
-              ),
 
             // Delete Option
             if (isMe)
