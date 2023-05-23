@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:chat_app/utils/helpers/chat_message.dart';
 import 'package:chat_app/model/chat_user.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../api/apis.dart';
+import '../utils/helpers/app_ui_helpers/chat_message.dart';
 import '../utils/helpers/app_ui_helpers/chattingpage_appbar.dart';
 import '../model/message.dart';
 import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
