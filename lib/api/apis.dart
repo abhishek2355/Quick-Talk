@@ -183,11 +183,17 @@ class APIs {
     await ref.doc(time).set(messages.toJson()).then((value) => sendPushNotification(chatUser, type == Type.text ? msg : 'image'));
   }
 
+  /* Update read status of message */
   static Future<void> updateMessageReadStatus(Messages message) async {
     firestore
         .collection('chats/${getConversationID(message.fromId)}/message/')
         .doc(message.sent)
         .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
+  }
+
+  /* get only last message of a specific chat */
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessage(UserChat user) {
+    return firestore.collection('chats/${getConversationID(user.id)}/message/').orderBy('sent ', descending: true).limit(1).snapshots();
   }
 
   // Send chat image

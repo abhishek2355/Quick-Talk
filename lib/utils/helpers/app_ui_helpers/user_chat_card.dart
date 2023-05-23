@@ -1,6 +1,8 @@
 import 'package:chat_app/Screens/chating_page.dart';
+import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/main.dart';
 import 'package:chat_app/model/chat_user.dart';
+import 'package:chat_app/model/message.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/profile_dialog_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
 import 'package:chat_app/utils/constants/app_widths.dart' as app_widths;
+
+import 'my_date_utils.dart';
 
 class ChatUserCard extends StatefulWidget {
   final UserChat user;
@@ -22,14 +26,18 @@ class ChatUserCard extends StatefulWidget {
 }
 
 class _ChatUserCardState extends State<ChatUserCard> {
+  //last message info
+  Messages? _message;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: media.height * app_heights.height100,
       child: Card(
-        margin: EdgeInsets.zero,
-        color: Colors.transparent,
-        elevation: 0,
+        margin: EdgeInsets.symmetric(vertical: media.height * 3 / 926),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        color: Colors.lightBlue[100],
+        elevation: 1,
         child: InkWell(
           // Navigat to the chat screen
           onTap: () {
@@ -42,71 +50,88 @@ class _ChatUserCardState extends State<ChatUserCard> {
           },
 
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: media.width * app_widths.width16),
-            child: Row(
-              children: [
-                // User profile icon
-                Padding(
-                  padding: EdgeInsets.only(right: media.width * app_widths.width16),
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: InkWell(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => ViewProfileDialog(
-                                  user: widget.user,
-                                ));
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(media.height * app_heights.height30),
-                        child: CachedNetworkImage(
-                          height: media.height * app_heights.height60,
-                          width: media.height * app_heights.height60,
-                          imageUrl: widget.user.image,
-                          errorWidget: (context, url, error) => const CircleAvatar(
-                            child: Icon(CupertinoIcons.person),
+              padding: EdgeInsets.symmetric(horizontal: media.width * app_widths.width16),
+              child: StreamBuilder(
+                stream: APIs.getLastMessage(widget.user),
+                builder: (context, snapshot) {
+                  final data = snapshot.data?.docs;
+                  final _list = data?.map((e) => Messages.fromJson(e.data())).toList() ?? [];
+                  if (_list.isNotEmpty) _message = _list[0];
+
+                  return Row(
+                    children: [
+                      // User profile icon
+                      Padding(
+                        padding: EdgeInsets.only(right: media.width * app_widths.width16),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: InkWell(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => ViewProfileDialog(
+                                        user: widget.user,
+                                      ));
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(media.height * app_heights.height30),
+                              child: CachedNetworkImage(
+                                height: media.height * app_heights.height60,
+                                width: media.height * app_heights.height60,
+                                imageUrl: widget.user.image,
+                                errorWidget: (context, url, error) => const CircleAvatar(
+                                  child: Icon(CupertinoIcons.person),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
 
-                // users name and about
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.user.name,
-                        maxLines: 1,
-                        style: TextStyle(fontSize: media.height * app_heights.height24),
+                      // users name and about
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.user.name,
+                              maxLines: 1,
+                              style: TextStyle(fontSize: media.height * app_heights.height24),
+                            ),
+                            SizedBox(
+                              height: media.height * app_heights.height5,
+                            ),
+                            Text(
+                              _message != null ? _message!.msg : widget.user.about,
+                              maxLines: 1,
+                              style: TextStyle(fontSize: media.height * app_heights.height18, color: Colors.black45),
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(
-                        height: media.height * app_heights.height5,
-                      ),
-                      Text(
-                        widget.user.about,
-                        maxLines: 1,
-                        style: TextStyle(fontSize: media.height * app_heights.height18, color: Colors.black45),
-                      ),
+
+                      // Last message time
+                      Container(
+                          alignment: Alignment.centerRight,
+                          child: Center(
+                            child: _message == null
+                                ? null
+                                : _message!.read.isEmpty && _message!.fromId != APIs.user.uid
+                                    ? Container(
+                                        width: media.height * 15 / 926,
+                                        height: media.height * 15 / 926,
+                                        decoration: BoxDecoration(color: Colors.greenAccent.shade400, borderRadius: BorderRadius.circular(20)),
+                                      )
+                                    : Text(
+                                        MyDateUtil.getLastMessageTime(context: context, time: _message!.sent),
+                                        style: TextStyle(fontSize: media.height * 18 / 926),
+                                      ),
+                          )),
                     ],
-                  ),
-                ),
-
-                // Last message time
-                Container(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    '12:00 am',
-                    style: TextStyle(color: Colors.black45, fontSize: media.height * app_heights.height18),
-                  ),
-                ),
-              ],
-            ),
-          ),
+                  );
+                },
+              )),
         ),
       ),
     );
