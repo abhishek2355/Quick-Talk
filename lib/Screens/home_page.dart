@@ -62,149 +62,154 @@ class _HomePageState extends State<HomePage> {
             return Future.value(true);
           }
         },
-        child: Scaffold(
-          // AppBar
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(media.height * app_heights.height70),
-            child: AppBar(
-              backgroundColor: const Color.fromARGB(255, 181, 227, 248),
-              // App Text
-              title: (_isSearch)
-                  ? TextFormField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: app_strings.homepageSearchbarText,
-                        hintStyle: TextStyle(color: Colors.black, fontSize: media.height * app_heights.height22),
-                      ),
-                      autofocus: true,
-                      style: TextStyle(fontSize: media.height * app_heights.height25, letterSpacing: 0.5),
+        child: Container(
+          color: const Color.fromARGB(255, 181, 227, 248),
+          child: SafeArea(
+            child: Scaffold(
+              // AppBar
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(media.height * app_heights.height70),
+                child: AppBar(
+                  backgroundColor: const Color.fromARGB(255, 181, 227, 248),
+                  // App Text
+                  title: (_isSearch)
+                      ? TextFormField(
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: app_strings.homepageSearchbarText,
+                            hintStyle: TextStyle(color: Colors.black, fontSize: media.height * app_heights.height22),
+                          ),
+                          autofocus: true,
+                          style: TextStyle(fontSize: media.height * app_heights.height25, letterSpacing: 0.5),
 
-                      // When search text is entered then update the search list
-                      onChanged: (val) {
-                        _searchlist.clear();
+                          // When search text is entered then update the search list
+                          onChanged: (val) {
+                            _searchlist.clear();
 
-                        // Iterate the main list
-                        for (var i in _list) {
-                          if (i.name.toLowerCase().contains(val.toLowerCase()) || (i.email.toLowerCase().contains(val.toLowerCase()))) {
-                            _searchlist.add(i);
-                          }
-                          setState(
-                            () {
-                              _searchlist;
-                            },
-                          );
-                        }
+                            // Iterate the main list
+                            for (var i in _list) {
+                              if (i.name.toLowerCase().contains(val.toLowerCase()) || (i.email.toLowerCase().contains(val.toLowerCase()))) {
+                                _searchlist.add(i);
+                              }
+                              setState(
+                                () {
+                                  _searchlist;
+                                },
+                              );
+                            }
+                          },
+                        )
+                      : Text(
+                          app_strings.appName,
+                          style: TextStyle(fontSize: media.height * app_heights.height28, color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+
+                  actions: [
+                    // Search Icon
+                    IconButton(
+                      onPressed: () {
+                        setState(
+                          () {
+                            _isSearch = !_isSearch;
+                          },
+                        );
                       },
-                    )
-                  : Text(
-                      app_strings.appName,
-                      style: TextStyle(fontSize: media.height * app_heights.height28, color: Colors.black, fontWeight: FontWeight.bold),
+                      icon: (_isSearch)
+                          ? Icon(
+                              CupertinoIcons.clear_circled_solid,
+                              color: Colors.black,
+                              size: media.height * app_heights.height35,
+                            )
+                          : Icon(
+                              Icons.search,
+                              size: media.height * app_heights.height35,
+                              color: Colors.black,
+                            ),
                     ),
 
-              actions: [
-                // Search Icon
-                IconButton(
-                  onPressed: () {
-                    setState(
-                      () {
-                        _isSearch = !_isSearch;
+                    // Profile icons
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Profile(user: APIs.me),
+                          ),
+                        );
                       },
-                    );
-                  },
-                  icon: (_isSearch)
-                      ? Icon(
-                          CupertinoIcons.clear_circled_solid,
-                          color: Colors.black,
-                          size: media.height * app_heights.height35,
-                        )
-                      : Icon(
-                          Icons.search,
-                          size: media.height * app_heights.height35,
-                          color: Colors.black,
-                        ),
-                ),
-
-                // Profile icons
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Profile(user: APIs.me),
+                      icon: Icon(
+                        CupertinoIcons.profile_circled,
+                        color: Colors.black,
+                        size: media.height * app_heights.height35,
                       ),
-                    );
-                  },
-                  icon: Icon(
-                    CupertinoIcons.profile_circled,
-                    color: Colors.black,
-                    size: media.height * app_heights.height35,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Body of the project
-          body: Center(
-            child: Container(
-              height: media.height,
-              width: media.width,
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                    Colors.white,
-                    Color.fromARGB(255, 52, 174, 231),
+                    ),
                   ],
                 ),
               ),
-              child: StreamBuilder(
-                stream: APIs.getAllUsers(),
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    // if data is loading
-                    case ConnectionState.waiting:
-                    case ConnectionState.none:
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
 
-                    // If some or all data is loading
-                    case ConnectionState.active:
-                    case ConnectionState.done:
+              // Body of the project
+              body: Center(
+                child: Container(
+                  height: media.height,
+                  width: media.width,
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                        Colors.white,
+                        Color.fromARGB(255, 52, 174, 231),
+                      ],
+                    ),
+                  ),
+                  child: StreamBuilder(
+                    stream: APIs.getAllUsers(),
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        // if data is loading
+                        case ConnectionState.waiting:
+                        case ConnectionState.none:
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
 
-                      // If data is there
-                      if (snapshot.hasData) {
-                        final data = snapshot.data?.docs;
-                        _list = data?.map((e) => UserChat.fromJson(e.data())).toList() ?? [];
-                      }
+                        // If some or all data is loading
+                        case ConnectionState.active:
+                        case ConnectionState.done:
 
-                      if (_list.isNotEmpty) {
-                        return ListView.builder(
-                          physics: const BouncingScrollPhysics(),
+                          // If data is there
+                          if (snapshot.hasData) {
+                            final data = snapshot.data?.docs;
+                            _list = data?.map((e) => UserChat.fromJson(e.data())).toList() ?? [];
+                          }
 
-                          itemBuilder: ((context, index) {
-                            return ChatUserCard(
-                              // if we search then search list will show
-                              user: (_isSearch) ? _searchlist[index] : _list[index],
+                          if (_list.isNotEmpty) {
+                            return ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+
+                              itemBuilder: ((context, index) {
+                                return ChatUserCard(
+                                  // if we search then search list will show
+                                  user: (_isSearch) ? _searchlist[index] : _list[index],
+                                );
+                              }),
+
+                              // If we search user then count will be searchlist count otherwise main list count
+                              itemCount: (_isSearch) ? _searchlist.length : _list.length,
                             );
-                          }),
-
-                          // If we search user then count will be searchlist count otherwise main list count
-                          itemCount: (_isSearch) ? _searchlist.length : _list.length,
-                        );
-                      } else {
-                        return Center(
-                          child: Text(
-                            app_strings.homePageNoAnyConnection,
-                            style: TextStyle(fontSize: media.height * app_heights.height25, letterSpacing: 2),
-                          ),
-                        );
+                          } else {
+                            return Center(
+                              child: Text(
+                                app_strings.homePageNoAnyConnection,
+                                style: TextStyle(fontSize: media.height * app_heights.height25, letterSpacing: 2),
+                              ),
+                            );
+                          }
                       }
-                  }
-                },
+                    },
+                  ),
+                ),
               ),
             ),
           ),

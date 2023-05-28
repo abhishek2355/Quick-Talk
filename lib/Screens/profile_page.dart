@@ -39,232 +39,237 @@ class _ProfileState extends State<Profile> {
 
     return GestureDetector(
       onTap: (() => FocusScope.of(context).unfocus()),
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        // App Bar
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(media.height * app_heights.height70),
-          child: AppBar(
-            backgroundColor: const Color.fromARGB(255, 181, 227, 248),
-            iconTheme: IconThemeData(color: Colors.black, size: media.height * app_heights.height28),
-            title: Text(
-              app_strings.appName,
-              style: TextStyle(fontSize: media.height * app_heights.height28, color: Colors.black, fontWeight: FontWeight.bold),
+      child: Container(
+        color: const Color.fromARGB(255, 181, 227, 248),
+        child: SafeArea(
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            // App Bar
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(media.height * app_heights.height70),
+              child: AppBar(
+                backgroundColor: const Color.fromARGB(255, 181, 227, 248),
+                iconTheme: IconThemeData(color: Colors.black, size: media.height * app_heights.height28),
+                title: Text(
+                  app_strings.appName,
+                  style: TextStyle(fontSize: media.height * app_heights.height28, color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
-          ),
-        ),
 
-        // floating Action Button for add new user
-        floatingActionButton: SizedBox(
-          height: media.height * app_heights.height50,
-          child: FloatingActionButton.extended(
-            backgroundColor: Colors.black38,
-            onPressed: () async {
-              // Show the progressbar
-              Dialogs.showProgressBar(context);
+            // floating Action Button for add new user
+            floatingActionButton: SizedBox(
+              height: media.height * app_heights.height50,
+              child: FloatingActionButton.extended(
+                backgroundColor: Colors.black38,
+                onPressed: () async {
+                  // Show the progressbar
+                  Dialogs.showProgressBar(context);
 
-              await APIs.updateActiveStatus(false);
+                  await APIs.updateActiveStatus(false);
 
-              // Sign out from the app
-              await APIs.auth.signOut().then(
-                (value) async {
-                  await GoogleSignIn().signOut().then(
-                    (value) {
-                      // For hide the progressbar
-                      Navigator.pop(context);
+                  // Sign out from the app
+                  await APIs.auth.signOut().then(
+                    (value) async {
+                      await GoogleSignIn().signOut().then(
+                        (value) {
+                          // For hide the progressbar
+                          Navigator.pop(context);
 
-                      // For moving to the home screen
-                      Navigator.pop(context);
+                          // For moving to the home screen
+                          Navigator.pop(context);
 
-                      APIs.auth = FirebaseAuth.instance;
+                          APIs.auth = FirebaseAuth.instance;
 
-                      // For move to the login page
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
-                        ),
+                          // For move to the login page
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ),
+                          );
+                        },
                       );
                     },
                   );
                 },
-              );
-            },
 
-            // Icon for floating action button
-            icon: Icon(Icons.logout, size: media.height * app_heights.height28),
+                // Icon for floating action button
+                icon: Icon(Icons.logout, size: media.height * app_heights.height28),
 
-            // Text of floating action button
-            label: Text(
-              app_strings.profilePageLogoutText,
-              style: TextStyle(fontSize: media.height * app_heights.height21),
-            ),
-          ),
-        ),
-
-        // Body of the project
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Container(
-            height: media.height,
-            width: media.width,
-
-            // Background color
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Colors.white,
-                  Color.fromARGB(255, 52, 174, 231),
-                ],
+                // Text of floating action button
+                label: Text(
+                  app_strings.profilePageLogoutText,
+                  style: TextStyle(fontSize: media.height * app_heights.height21),
+                ),
               ),
             ),
 
-            // Content of screen
-            child: Form(
-              key: _formkey,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: media.width * app_widths.width16,
+            // Body of the project
+            body: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Container(
+                height: media.height,
+                width: media.width,
+
+                // Background color
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [
+                      Colors.white,
+                      Color.fromARGB(255, 52, 174, 231),
+                    ],
+                  ),
                 ),
-                child: Column(
-                  children: [
-                    // SizedBox with height 40
-                    SizedBox(
-                      height: media.height * app_heights.height40,
+
+                // Content of screen
+                child: Form(
+                  key: _formkey,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: media.width * app_widths.width16,
                     ),
+                    child: Column(
+                      children: [
+                        // SizedBox with height 40
+                        SizedBox(
+                          height: media.height * app_heights.height40,
+                        ),
 
-                    // Profile picture
-                    SizedBox(
-                      height: media.height * app_heights.height180,
-                      child: Stack(
-                        children: [
-                          (_pickedImage != null)
-                              ? // User profile image
-                              ClipRRect(
-                                  borderRadius: BorderRadius.circular(media.height * app_heights.height90),
-                                  child: Image.file(
-                                    File(_pickedImage!),
-                                    height: media.height * app_heights.height180,
-                                    width: media.height * app_heights.height180,
-                                    fit: BoxFit.fill,
-                                  ),
-                                )
-                              :
-                              // User profile image
-                              ClipRRect(
-                                  borderRadius: BorderRadius.circular(media.height * app_heights.height90),
-                                  child: CachedNetworkImage(
-                                    height: media.height * app_heights.height180,
-                                    width: media.height * app_heights.height180,
-                                    fit: BoxFit.fill,
-                                    imageUrl: widget.user.image,
-                                    errorWidget: (context, url, error) => const CircleAvatar(child: Icon(CupertinoIcons.person)),
-                                  ),
-                                ),
-
-                          // Edit profile picture icon
-                          Positioned(
-                            bottom: 1,
-                            right: 1,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 3,
-                                  color: Colors.white,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    50,
-                                  ),
-                                ),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    offset: const Offset(2, 4),
-                                    color: Colors.black.withOpacity(
-                                      0.3,
+                        // Profile picture
+                        SizedBox(
+                          height: media.height * app_heights.height180,
+                          child: Stack(
+                            children: [
+                              (_pickedImage != null)
+                                  ? // User profile image
+                                  ClipRRect(
+                                      borderRadius: BorderRadius.circular(media.height * app_heights.height90),
+                                      child: Image.file(
+                                        File(_pickedImage!),
+                                        height: media.height * app_heights.height180,
+                                        width: media.height * app_heights.height180,
+                                        fit: BoxFit.fill,
+                                      ),
+                                    )
+                                  :
+                                  // User profile image
+                                  ClipRRect(
+                                      borderRadius: BorderRadius.circular(media.height * app_heights.height90),
+                                      child: CachedNetworkImage(
+                                        height: media.height * app_heights.height180,
+                                        width: media.height * app_heights.height180,
+                                        fit: BoxFit.fill,
+                                        imageUrl: widget.user.image,
+                                        errorWidget: (context, url, error) => const CircleAvatar(child: Icon(CupertinoIcons.person)),
+                                      ),
                                     ),
-                                    blurRadius: 3,
+
+                              // Edit profile picture icon
+                              Positioned(
+                                bottom: 1,
+                                right: 1,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 3,
+                                      color: Colors.white,
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(
+                                        50,
+                                      ),
+                                    ),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        offset: const Offset(2, 4),
+                                        color: Colors.black.withOpacity(
+                                          0.3,
+                                        ),
+                                        blurRadius: 3,
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(media.height * app_heights.height1),
-                                child: InkWell(
-                                  child: Icon(
-                                    Icons.add_a_photo,
-                                    color: Colors.black,
-                                    size: media.height * app_heights.height28,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(media.height * app_heights.height1),
+                                    child: InkWell(
+                                      child: Icon(
+                                        Icons.add_a_photo,
+                                        color: Colors.black,
+                                        size: media.height * app_heights.height28,
+                                      ),
+                                      onTap: () {
+                                        _showBottomSheet();
+                                      },
+                                    ),
                                   ),
-                                  onTap: () {
-                                    _showBottomSheet();
-                                  },
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
 
-                    // SizedBox with height 30
-                    SizedBox(
-                      height: media.height * app_heights.height30,
-                    ),
+                        // SizedBox with height 30
+                        SizedBox(
+                          height: media.height * app_heights.height30,
+                        ),
 
-                    // Name of the user
-                    Text(
-                      widget.user.name,
-                      style: TextStyle(color: Colors.black87, fontSize: media.height * app_heights.height28, fontWeight: FontWeight.bold),
-                    ),
+                        // Name of the user
+                        Text(
+                          widget.user.name,
+                          style: TextStyle(color: Colors.black87, fontSize: media.height * app_heights.height28, fontWeight: FontWeight.bold),
+                        ),
 
-                    // Mail of user
-                    Text(
-                      widget.user.email,
-                      style: TextStyle(color: Colors.black87, fontSize: media.height * app_heights.height22),
-                    ),
+                        // Mail of user
+                        Text(
+                          widget.user.email,
+                          style: TextStyle(color: Colors.black87, fontSize: media.height * app_heights.height22),
+                        ),
 
-                    // SizedBox with height 80
-                    SizedBox(
-                      height: media.height * app_heights.height80,
-                    ),
+                        // SizedBox with height 80
+                        SizedBox(
+                          height: media.height * app_heights.height80,
+                        ),
 
-                    // Name TextFormField
-                    SizedBox(
-                      height: media.height * app_heights.height70,
-                      child: ProfileChangeTextField(
-                          userprofileinfo: widget.user.name,
-                          hintText: app_strings.profilePageNameHintText,
-                          lableText: app_strings.profilePageNameLableText,
-                          onSaveInfo: (val) => APIs.me.name = val ?? ' '),
-                    ),
+                        // Name TextFormField
+                        SizedBox(
+                          height: media.height * app_heights.height70,
+                          child: ProfileChangeTextField(
+                              userprofileinfo: widget.user.name,
+                              hintText: app_strings.profilePageNameHintText,
+                              lableText: app_strings.profilePageNameLableText,
+                              onSaveInfo: (val) => APIs.me.name = val ?? ' '),
+                        ),
 
-                    // SizedBox with height 20
-                    SizedBox(
-                      height: media.height * app_heights.height20,
-                    ),
+                        // SizedBox with height 20
+                        SizedBox(
+                          height: media.height * app_heights.height20,
+                        ),
 
-                    // About TextFormField
-                    SizedBox(
-                      height: media.height * app_heights.height70,
-                      child: ProfileChangeTextField(
-                        userprofileinfo: widget.user.about,
-                        hintText: app_strings.profilePageAboutHintText,
-                        lableText: app_strings.profilePageAboutLableText,
-                        onSaveInfo: (val) => APIs.me.about = val ?? ' ',
-                      ),
-                    ),
+                        // About TextFormField
+                        SizedBox(
+                          height: media.height * app_heights.height70,
+                          child: ProfileChangeTextField(
+                            userprofileinfo: widget.user.about,
+                            hintText: app_strings.profilePageAboutHintText,
+                            lableText: app_strings.profilePageAboutLableText,
+                            onSaveInfo: (val) => APIs.me.about = val ?? ' ',
+                          ),
+                        ),
 
-                    // SizedBox with height 60
-                    SizedBox(
-                      height: media.height * app_heights.height60,
-                    ),
+                        // SizedBox with height 60
+                        SizedBox(
+                          height: media.height * app_heights.height60,
+                        ),
 
-                    // Update Button
-                    IconsWithButton(formkey: _formkey, buttonIcon: Icons.history, buttonText: app_strings.profileUpdateButtonText)
-                  ],
+                        // Update Button
+                        IconsWithButton(formkey: _formkey, buttonIcon: Icons.history, buttonText: app_strings.profileUpdateButtonText)
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
