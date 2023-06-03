@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/main.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/app_bottomSheet.dart';
-import 'package:chat_app/utils/helpers/app_ui_helpers/app_dialogbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,7 +9,6 @@ import '../../../model/message.dart';
 import '../../../helper/send_time.dart';
 import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
 import 'package:chat_app/utils/constants/app_widths.dart' as app_widths;
-import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
 
 import 'my_date_utils.dart';
 
@@ -27,7 +25,6 @@ class _MessageCardState extends State<MessageCard> {
 
   // reciver and sender messages
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
     bool isMe = APIs.user.uid == widget.messages.fromId;
 
     return InkWell(
