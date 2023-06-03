@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:chat_app/Screens/home_page.dart';
@@ -8,6 +9,7 @@ import 'package:chat_app/utils/helpers/app_ui_helpers/app_bottomiconbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
 import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
@@ -83,6 +85,16 @@ class _LoginPageState extends State<LoginPage> {
       Dialogs.showSnackbar(context, 'Something went wrong (check Internet!)');
       return null;
     }
+  }
+
+   // Login with faceBook 
+  _loginWithFacebook() async{
+    final result = await FacebookAuth.i.login();
+    if (result.status == LoginStatus.success) {
+      final userData = await FacebookAuth.i.getUserData();
+      log(userData as String);
+    }
+    
   }
 
   @override
@@ -191,7 +203,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
 
                     // Divider
-
                     Row(
                       children: [
                         Expanded(
@@ -228,7 +239,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         LoginIcons(
                           imageName: 'facebook.png',
-                          onTap: () {},
+                          onTap: () {
+                            _loginWithFacebook();
+                          },
                         ),
                         LoginIcons(
                           imageName: 'twitter.png',
