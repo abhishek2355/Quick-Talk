@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:chat_app/Screens/home_page.dart';
 import 'package:chat_app/api/apis.dart';
+import 'package:chat_app/auth/register_page.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/app_dialogbar.dart';
 import 'package:chat_app/main.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/app_bottomiconbar.dart';
@@ -224,7 +225,7 @@ class _LoginPageState extends State<LoginPage> {
 
                     // SizedBox with height 40
                     SizedBox(
-                      height: media.height * app_heights.height40,
+                      height: media.height * app_heights.height30,
                     ),
 
                     // Bottom iconbar
@@ -248,7 +249,22 @@ class _LoginPageState extends State<LoginPage> {
                           onTap: () {},
                         )
                       ],
-                    )
+                    ),
+                    // SizedBox with the height 40
+                    SizedBox(height: media.height * 30 / 926,),
+
+                    // Sign Up Text
+                    
+                    InkWell(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Don\'t have an Account?', style: TextStyle(fontSize: media.height * 20 / 926,color: Colors.white70)),
+                          Text(' Sign Up' , style: TextStyle(fontSize: media.height * 20 / 926,color: Colors.black,fontWeight: FontWeight.bold))
+                        ],
+                      ),
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage(),)),
+                    ),
                   ],
                 ),
               ),
