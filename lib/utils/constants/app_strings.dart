@@ -30,3 +30,11 @@ const profilebottomSheetText = 'Pick profile Photo';
 // Chatting screen
 const chattingScreenNoConnectionText = 'Say Hii 👋';
 const chattingScreenInputHintText = 'Type Something...';
+
+
+// Register page 
+const registerPageSetPasswordHinttext = 'Enter Password';
+const registerPageSetPasswordLabletext = 'Set Password';
+const mobileNumberHinttext = 'Enter phone';
+const mobileNumberLabletext = 'Phone';
+const registerButtonTextLable = 'Register';
