@@ -25,7 +25,6 @@ void main() async {
     importance: NotificationImportance.IMPORTANCE_HIGH,
     name: 'Quick Talk',
   );
-  log('\nNotification Channel result: $result');
 
   // Run the main application
   runApp(const MyApp());

@@ -88,15 +88,59 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-   // Login with faceBook 
+  // Login with faceBook 
   _loginWithFacebook() async{
-    final result = await FacebookAuth.i.login();
-    if (result.status == LoginStatus.success) {
-      final userData = await FacebookAuth.i.getUserData();
-      log(userData as String);
-    }
-    
+    Dialogs.showProgressBar(context);
+
+    // Signin with google
+    signInWithFacebook().then(
+      (user) async {
+        // Hide progressbar indicator
+        Navigator.pop(context);
+        // If return value is null
+        if (user != null) {
+          // We chack user exist
+          if ((await APIs.userexist())) {
+            // ignore: use_build_context_synchronously
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomePage(),
+              ),
+            );
+          } else {
+            APIs.createUser().then(
+              (value) => {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePage(),
+                  ),
+                )
+              },
+            );
+          }
+        }
+      },
+    );
   }
+
+  Future<UserCredential?> signInWithFacebook() async {
+    try{
+      // Trigger the sign-in flow
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      // Create a credential from the access token
+      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+      // Once signed in, return the UserCredential
+      return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+    }catch (e) {
+      Dialogs.showSnackbar(context, 'Something went wrong (check Internet!)');
+      return null;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -158,10 +202,11 @@ class _LoginPageState extends State<LoginPage> {
 
                     // ignore: prefer_const_constructors
                     TextFormFields(
-                        hintText: app_strings.loginpageEmailHintText,
-                        iconName: CupertinoIcons.mail,
-                        isPasswordTextField: false,
-                        labelText: app_strings.loginpageEmailLableText),
+                      hintText: app_strings.loginpageEmailHintText,
+                      iconName: CupertinoIcons.mail,
+                      isPasswordTextField: false,
+                      labelText: app_strings.loginpageEmailLableText
+                    ),
 
                     // Sizedbox with height 20
                     SizedBox(
@@ -170,17 +215,18 @@ class _LoginPageState extends State<LoginPage> {
 
                     // ignore: prefer_const_constructors
                     TextFormFields(
-                        hintText: app_strings.loginpagePasswordHintText,
-                        iconName: CupertinoIcons.lock_circle,
-                        isPasswordTextField: true,
-                        labelText: app_strings.loginpagePasswordLableText),
+                      hintText: app_strings.loginpagePasswordHintText,
+                      iconName: CupertinoIcons.lock_circle,
+                      isPasswordTextField: true,
+                      labelText: app_strings.loginpagePasswordLableText
+                    ),
 
                     // SizedBox with height 40
                     SizedBox(
                       height: media.height * app_heights.height40,
                     ),
 
-                    // SizedBox with height 50
+                    // Login Button
                     SizedBox(
                       height: media.height * app_heights.height50,
                       width: double.infinity,
@@ -207,19 +253,21 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       children: [
                         Expanded(
-                            child: Divider(
-                          height: media.height * app_heights.height1,
-                          thickness: 1,
-                        )),
+                          child: Divider(
+                            height: media.height * app_heights.height1,
+                            thickness: 1,
+                          )
+                        ),
                         Text(
                           '  OR  ',
                           style: TextStyle(fontSize: media.height * app_heights.height18),
                         ),
                         Expanded(
-                            child: Divider(
-                          height: media.height * app_heights.height1,
-                          thickness: 1,
-                        ))
+                          child: Divider(
+                            height: media.height * app_heights.height1,
+                            thickness: 1,
+                          )
+                        )
                       ],
                     ),
 
@@ -232,24 +280,31 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+
+                        // Google Icon
                         LoginIcons(
                           imageName: 'google.png',
                           onTap: () {
                             _handlegoogleBtnClick();
                           },
                         ),
+
+                        // Facebook Icon
                         LoginIcons(
                           imageName: 'facebook.png',
                           onTap: () {
                             _loginWithFacebook();
                           },
                         ),
+
+                        // Twitter Icon
                         LoginIcons(
                           imageName: 'twitter.png',
                           onTap: () {},
                         )
                       ],
                     ),
+
                     // SizedBox with the height 40
                     SizedBox(height: media.height * 30 / 926,),
 

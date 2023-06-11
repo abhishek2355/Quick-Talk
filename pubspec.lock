@@ -295,7 +295,7 @@ packages:
     source: hosted
     version: "5.0.11"
   flutter_facebook_auth_platform_interface:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_facebook_auth_platform_interface
       sha256: "0bc5fefc89b012635c4424a34334215e81e0ff38c5b413f869fd9c14a10c6135"

@@ -13,7 +13,9 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  // Animation Variable
   bool _isAnimate = false;
+  
   @override
   void initState() {
     super.initState();
