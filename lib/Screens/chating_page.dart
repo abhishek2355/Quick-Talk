@@ -35,15 +35,19 @@ class _ChattingPageState extends State<ChattingPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Variable of media Query
     var media = MediaQuery.of(context).size;
+
+    // Body of the chat screen
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Container(
-        color: const Color.fromARGB(255, 181, 227, 248),
+        color: Colors.white,
         child: SafeArea(
           child: WillPopScope(
+
             onWillPop: () {
               if (isShowEmoji) {
                 setState(() {
@@ -54,31 +58,24 @@ class _ChattingPageState extends State<ChattingPage> {
                 return Future.value(true);
               }
             },
+
             child: Scaffold(
+              // Appbar of the chat screen
               appBar: PreferredSize(
-                preferredSize: Size.fromHeight(media.height * app_heights.height70),
+                preferredSize: Size.fromHeight(media.height * app_heights.height80),
                 child: AppBar(
-                  backgroundColor: const Color.fromARGB(255, 181, 227, 248),
+                  backgroundColor: Colors.white,
                   automaticallyImplyLeading: false,
                   flexibleSpace: ChattingAppbar(widget: widget),
                 ),
               ),
+
+              // Body of the chatScreen
               body: Container(
-                // background color
                 height: media.height,
                 width: media.width,
                 alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [
-                      Colors.purple,
-                      Colors.indigo,
-                    ],
-                  ),
-                ),
-
+                
                 // Main Body of screen
                 child: Column(
                   children: [
