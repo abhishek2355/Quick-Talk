@@ -1,22 +1,14 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:chat_app/Screens/home_page.dart';
 import 'package:chat_app/api/apis.dart';
-import 'package:chat_app/auth/register_page.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/app_dialogbar.dart';
 import 'package:chat_app/main.dart';
-import 'package:chat_app/utils/helpers/app_ui_helpers/app_bottomiconbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
-import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
-import 'package:chat_app/utils/constants/app_widths.dart' as app_widths;
 
-import '../utils/helpers/app_ui_helpers/app_textfields.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -88,60 +80,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // Login with faceBook 
-  _loginWithFacebook() async{
-    Dialogs.showProgressBar(context);
-
-    // Signin with google
-    signInWithFacebook().then(
-      (user) async {
-        // Hide progressbar indicator
-        Navigator.pop(context);
-        // If return value is null
-        if (user != null) {
-          // We chack user exist
-          if ((await APIs.userexist())) {
-            // ignore: use_build_context_synchronously
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HomePage(),
-              ),
-            );
-          } else {
-            APIs.createUser().then(
-              (value) => {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomePage(),
-                  ),
-                )
-              },
-            );
-          }
-        }
-      },
-    );
-  }
-
-  Future<UserCredential?> signInWithFacebook() async {
-    try{
-      // Trigger the sign-in flow
-      final LoginResult loginResult = await FacebookAuth.instance.login();
-
-      // Create a credential from the access token
-      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-
-      // Once signed in, return the UserCredential
-      return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-    }catch (e) {
-      Dialogs.showSnackbar(context, 'Something went wrong (check Internet!)');
-      return null;
-    }
-  }
-
-
+  
   @override
   Widget build(BuildContext context) {
     media = MediaQuery.of(context).size;
@@ -150,179 +89,62 @@ class _LoginPageState extends State<LoginPage> {
         //  Body of Login page
         body: Center(
           // For give background color to the screen
-          child: Container(
+          child: SizedBox(
             height: media.height,
-            width: media.width,
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Color(0x00b6fcd5),
-                  Colors.lightBlue,
-                ],
-              ),
-            ),
-
+            width: media.width,            
             // Login page content
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: media.width * app_widths.width16),
-                child: Column(
-                  children: [
-                    // SizedBox with height 60
-                    SizedBox(
-                      height: media.height * app_heights.height60,
+            child: Stack(
+              children: [
+                // Image of login page
+                Image.asset('${app_strings.imagePath}login.jpg',height: media.height * 600/ 926,width: media.width,fit: BoxFit.fill),             
+
+                // Container with text
+                Positioned(
+                  top: media.height* 500/926,
+                  child: Container(
+                    height: media.height* 400/926,
+                    width: media.width,
+                    alignment: Alignment.topCenter,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30))
                     ),
-
-                    // App Name
-                    Text(
-                      app_strings.appName,
-                      style: TextStyle(fontSize: media.height * app_heights.height50, fontWeight: FontWeight.bold),
-                    ),
-
-                    // SizedBox with height 60
-                    SizedBox(
-                      height: media.height * app_heights.height60,
-                    ),
-
-                    // App Icon
-                    Image.asset(
-                      '${app_strings.imagePath}icon.png',
-                      width: media.height * app_heights.height200,
-                      height: media.height * app_heights.height200,
-                    ),
-
-                    // Sizedbox with height 60
-                    SizedBox(
-                      height: media.height * app_heights.height60,
-                    ),
-
-                    // ignore: prefer_const_constructors
-                    TextFormFields(
-                      hintText: app_strings.loginpageEmailHintText,
-                      iconName: CupertinoIcons.mail,
-                      isPasswordTextField: false,
-                      labelText: app_strings.loginpageEmailLableText
-                    ),
-
-                    // Sizedbox with height 20
-                    SizedBox(
-                      height: media.height * app_heights.height20,
-                    ),
-
-                    // ignore: prefer_const_constructors
-                    TextFormFields(
-                      hintText: app_strings.loginpagePasswordHintText,
-                      iconName: CupertinoIcons.lock_circle,
-                      isPasswordTextField: true,
-                      labelText: app_strings.loginpagePasswordLableText
-                    ),
-
-                    // SizedBox with height 40
-                    SizedBox(
-                      height: media.height * app_heights.height40,
-                    ),
-
-                    // Login Button
-                    SizedBox(
-                      height: media.height * app_heights.height50,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20), // <-- Radius
-                          ),
-                        ),
-                        onPressed: () {},
-                        child: Text(
-                          app_strings.loginButtonText,
-                          style: TextStyle(fontSize: media.height * app_heights.height21, color: Colors.black, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-
-                    // Sizedbox with height 60
-                    SizedBox(
-                      height: media.height * app_heights.height60,
-                    ),
-
-                    // Divider
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            height: media.height * app_heights.height1,
-                            thickness: 1,
-                          )
-                        ),
-                        Text(
-                          '  OR  ',
-                          style: TextStyle(fontSize: media.height * app_heights.height18),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            height: media.height * app_heights.height1,
-                            thickness: 1,
-                          )
-                        )
-                      ],
-                    ),
-
-                    // SizedBox with height 40
-                    SizedBox(
-                      height: media.height * app_heights.height30,
-                    ),
-
-                    // Bottom iconbar
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-
-                        // Google Icon
-                        LoginIcons(
-                          imageName: 'google.png',
-                          onTap: () {
-                            _handlegoogleBtnClick();
-                          },
-                        ),
-
-                        // Facebook Icon
-                        LoginIcons(
-                          imageName: 'facebook.png',
-                          onTap: () {
-                            _loginWithFacebook();
-                          },
-                        ),
-
-                        // Twitter Icon
-                        LoginIcons(
-                          imageName: 'twitter.png',
-                          onTap: () {},
-                        )
-                      ],
-                    ),
-
-                    // SizedBox with the height 40
-                    SizedBox(height: media.height * 30 / 926,),
-
-                    // Sign Up Text
-                    
-                    InkWell(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    child: Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: media.width * 16 / 428),
+                      child: Column(
                         children: [
-                          Text('Don\'t have an Account?', style: TextStyle(fontSize: media.height * 20 / 926,color: Colors.white70)),
-                          Text(' Sign Up' , style: TextStyle(fontSize: media.height * 20 / 926,color: Colors.black,fontWeight: FontWeight.bold))
+                          SizedBox(height: media.height * 50 / 926,),
+                          Text('Enjoy the new experience of Chatting with global friends',style: TextStyle(fontSize: media.height * 34 / 926,fontWeight: FontWeight.bold),),
+                          SizedBox(height: media.height * 25 / 926,),
+                          Text('Connect people arround the world for free',style: TextStyle(color: Colors.grey,fontSize: media.height * 20 / 926),)
                         ],
                       ),
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage(),)),
                     ),
-                  ],
+                  )
                 ),
-              ),
+
+                // Get start button
+                Positioned(
+                  top:media.height * 750 / 926,
+                  left: media.width * 40 / 428,
+                  right: media.width * 40 / 428,
+                  child: SizedBox(
+                    height: media.height * 70 / 926,
+                    width: media.width,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20), // <-- Radius
+                        ),
+                        elevation: 10,
+                        shadowColor: Colors.purple
+                      ),
+                      onPressed: (){_handlegoogleBtnClick();}, 
+                      child: Text('Get Started',style: TextStyle(fontSize: media.height * 25 / 926,fontWeight: FontWeight.bold,letterSpacing: 1,color: Colors.black),)
+                    ),
+                  )
+                )
+              ],
             ),
           ),
         ),
