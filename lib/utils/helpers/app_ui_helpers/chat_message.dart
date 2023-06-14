@@ -45,39 +45,50 @@ class _MessageCardState extends State<MessageCard> {
       children: [
         Flexible(
           child: Container(
-            decoration: BoxDecoration(
-                color: Colors.blue.shade100,
-                border: Border.all(color: Colors.black),
-                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(30), topRight: Radius.circular(30), bottomRight: Radius.circular(30))),
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), topRight: Radius.circular(15), bottomRight: Radius.circular(15))),
             padding: EdgeInsets.all((widget.messages.type == Type.text) ? media.height * app_heights.height20 : media.height * app_heights.height10),
             margin: EdgeInsets.symmetric(horizontal: media.width * app_widths.width16, vertical: media.height * app_heights.height10),
-            child: (widget.messages.type == Type.text)
-                ? Text(
-                    widget.messages.msg,
-                    style: TextStyle(fontSize: media.height * app_heights.height25, color: Colors.black),
-                  )
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(media.height * app_heights.height30),
-                    child: CachedNetworkImage(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Message of text and image
+                (widget.messages.type == Type.text)
+                  ? Text(
+                      widget.messages.msg,
+                      style: TextStyle(fontSize: media.height * app_heights.height25, color: Colors.black),
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(media.height * app_heights.height30),
+                      child: CachedNetworkImage(
                         imageUrl: widget.messages.msg,
                         placeholder: (context, url) => const CircularProgressIndicator(strokeWidth: 2),
                         errorWidget: (context, url, error) => Icon(
-                              Icons.image,
-                              size: media.height * app_heights.height70,
-                              color: Colors.blue,
-                            )),
-                  ),
+                          Icons.image,
+                          size: media.height * app_heights.height70,
+                          color: Colors.blue,
+                        )
+                      ),
+                    ),
+
+                // SizedBox with height 10
+                SizedBox(
+                  height: media.height * app_heights.height10,
+                ),
+
+                //  Show the time of message
+                Text(
+                  MessageSendTime.getTimeOfMessages(context: context, time: widget.messages.sent),
+                  style: TextStyle(fontSize: media.height * app_heights.height15, color: Colors.black),
+                ),
+              ],
+            ),
           ),
         ),
-
-        //  Show the time of message
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: media.width * app_widths.width16),
-          child: Text(
-            MessageSendTime.getTimeOfMessages(context: context, time: widget.messages.sent),
-            style: TextStyle(fontSize: media.height * app_heights.height15, color: Colors.white),
-          ),
-        )
+        SizedBox(
+          width: media.width * app_widths.width89,
+        ),
       ],
     );
   }
@@ -85,69 +96,88 @@ class _MessageCardState extends State<MessageCard> {
   // Our messages
   Widget _greenMessageCard() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        //  Show the time of message
-        Row(
-          children: [
-            SizedBox(
-              width: media.width * app_widths.width10,
-            ),
-
-            // If message is read then it will work
-            (widget.messages.read.isNotEmpty)
-                ? Icon(
-                    Icons.done_all_rounded,
-                    color: Colors.blue,
-                    size: media.height * app_heights.height20,
-                  )
-                : Icon(
-                    Icons.done_all_rounded,
-                    color: Colors.grey,
-                    size: media.height * app_heights.height20,
-                  ),
-
-            // SizedBox
-            SizedBox(
-              width: media.width * app_widths.width10,
-            ),
-
-            // Sending Time
-            Text(
-              MessageSendTime.getTimeOfMessages(context: context, time: widget.messages.sent),
-              style: TextStyle(fontSize: media.height * app_heights.height15, color: Colors.white),
-            ),
-          ],
+        // SizedBox with width 90
+        SizedBox(
+          width: media.width * app_widths.width89,
         ),
+
+        // Message Container
         Flexible(
-            child: Container(
-          decoration: BoxDecoration(
-              color: Colors.pink[50],
-              border: Border.all(color: Colors.black),
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), bottomRight: Radius.circular(30), bottomLeft: Radius.circular(30))),
-          padding: EdgeInsets.all(widget.messages.type == Type.text ? media.height * app_heights.height20 : media.height * app_heights.height10),
-          margin: EdgeInsets.symmetric(horizontal: media.width * app_widths.width10, vertical: media.height * app_heights.height10),
-          child: widget.messages.type == Type.text
-              ? Text(
-                  widget.messages.msg,
-                  style: TextStyle(fontSize: media.height * app_heights.height25, color: Colors.black),
-                )
-              : ClipRRect(
-                  borderRadius: BorderRadius.circular(media.height * app_heights.height30),
-                  child: CachedNetworkImage(
-                      imageUrl: widget.messages.msg,
-                      placeholder: (context, url) => const CircularProgressIndicator(strokeWidth: 2),
-                      errorWidget: (context, url, error) => Icon(
-                            Icons.image,
-                            size: media.height * app_heights.height70,
-                            color: Colors.blue,
-                          )),
+          child: Container(
+            decoration: const BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.only(topRight: Radius.circular(15), topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))),
+            padding: EdgeInsets.all(widget.messages.type == Type.text ? media.height * app_heights.height20 : media.height * app_heights.height10),
+            margin: EdgeInsets.symmetric(horizontal: media.width * app_widths.width10, vertical: media.height * app_heights.height10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                // Text or image
+                Container(
+                  child: widget.messages.type == Type.text
+                      ? Text(
+                          widget.messages.msg,
+                          style: TextStyle(fontSize: media.height * app_heights.height25, color: Colors.black),
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(media.height * app_heights.height30),
+                          child: CachedNetworkImage(
+                              imageUrl: widget.messages.msg,
+                              placeholder: (context, url) => const CircularProgressIndicator(strokeWidth: 2),
+                              errorWidget: (context, url, error) => Icon(
+                                    Icons.image,
+                                    size: media.height * app_heights.height70,
+                                    color: Colors.blue,
+                                  )),
+                        ),
                 ),
-        )),
+
+                // Sizedbox with height 10
+                SizedBox(
+                  height: media.height * app_heights.height10,
+                ),
+
+                // Message time and message read tik
+                SizedBox(
+                  width: media.width * app_widths.width80,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Sending Time
+                      Text(
+                        MessageSendTime.getTimeOfMessages(context: context, time: widget.messages.sent),
+                        style: TextStyle(fontSize: media.height * app_heights.height15, color: Colors.black),
+                      ),
+
+                      // SizedBox with width 10
+                      SizedBox(
+                        width: media.width * app_widths.width2,
+                      ),
+
+                      // If message is read then it will work
+                      (widget.messages.read.isNotEmpty)
+                        ? Icon(
+                            Icons.done_all_rounded,
+                            color: Colors.purple,
+                            size: media.height * app_heights.height20,
+                          )
+                        : Icon(
+                            Icons.done_all_rounded,
+                            color: Colors.white,
+                            size: media.height * app_heights.height20,
+                          ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )
+        ),
       ],
     );
   }
-
 // Bottom Sheet Bar
   void _showBottomSheet(bool isMe) {
     showModalBottomSheet(
@@ -161,41 +191,44 @@ class _MessageCardState extends State<MessageCard> {
           children: [
             // Black Divider
             Container(
-              height: media.height * 4 / 926,
-              margin: EdgeInsets.symmetric(horizontal: media.width * 160 / 428),
+              height: media.height * app_heights.height4,
+              margin: EdgeInsets.symmetric(horizontal: media.width * app_widths.width160),
               decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(8)),
             ),
 
             // Copy Option
             widget.messages.type == Type.text
-                ? OptionItemOfBottomSheet(
-                    icon: Icon(
-                      Icons.copy_all_rounded,
-                      color: Colors.black,
-                      size: media.height * 30 / 926,
-                    ),
-                    name: 'Copy',
-                    onTap: () async {
+              ? OptionItemOfBottomSheet(
+                  icon: Icon(
+                    Icons.copy_all_rounded,
+                    color: Colors.black,
+                    size: media.height * app_heights.height30,
+                  ),
+                  name: 'Copy',
+                  onTap: () async {
+                    if (mounted) {
                       await Clipboard.setData(ClipboardData(text: widget.messages.msg)).then((value) {
                         // For close the bottomsheet
                         Navigator.pop(context);
                       });
-                    },
-                  )
-                : OptionItemOfBottomSheet(
-                    icon: Icon(
-                      Icons.download_rounded,
-                      color: Colors.black,
-                      size: media.height * 30 / 926,
-                    ),
-                    name: 'Save Image',
-                    onTap: () {},
+                    }
+                  },
+                )
+              : OptionItemOfBottomSheet(
+                  icon: Icon(
+                    Icons.download_rounded,
+                    color: Colors.black,
+                    size: media.height * app_heights.height30,
                   ),
-
+                  name: 'Save Image',
+                  onTap: () {},
+                ),
+            
+            // Divider 
             Divider(
               color: Colors.black,
-              endIndent: media.width * 16 / 428,
-              indent: media.width * 16 / 428,
+              endIndent: media.width * app_widths.width16,
+              indent: media.width * app_widths.width16,
             ),
 
             // Delete Option
@@ -204,7 +237,7 @@ class _MessageCardState extends State<MessageCard> {
                 icon: Icon(
                   Icons.delete_outline_rounded,
                   color: Colors.red,
-                  size: media.height * 30 / 926,
+                  size: media.height * app_heights.height30,
                 ),
                 name: 'Delete',
                 onTap: () {
@@ -214,11 +247,12 @@ class _MessageCardState extends State<MessageCard> {
                 },
               ),
 
+            // Divider 
             if (isMe)
               Divider(
                 color: Colors.black,
-                endIndent: media.width * 16 / 428,
-                indent: media.width * 16 / 428,
+                endIndent: media.width * app_widths.width16,
+                indent: media.width * app_widths.width16,
               ),
 
             // Send time
@@ -226,7 +260,7 @@ class _MessageCardState extends State<MessageCard> {
               icon: Icon(
                 Icons.remove_red_eye,
                 color: Colors.grey,
-                size: media.height * 30 / 926,
+                size: media.height * app_heights.height30,
               ),
               name: 'Sent at: ${MyDateUtil.getMessageTime(context: context, time: widget.messages.sent)}',
               onTap: () {},
@@ -237,7 +271,7 @@ class _MessageCardState extends State<MessageCard> {
               icon: Icon(
                 Icons.remove_red_eye,
                 color: Colors.blue,
-                size: media.height * 30 / 926,
+                size: media.height * app_heights.height30,
               ),
               name: widget.messages.read.isEmpty
                   ? 'Read at: Not available yet'

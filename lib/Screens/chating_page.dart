@@ -75,6 +75,7 @@ class _ChattingPageState extends State<ChattingPage> {
                 height: media.height,
                 width: media.width,
                 alignment: Alignment.center,
+                color: const Color.fromARGB(255, 233, 233, 214),
                 
                 // Main Body of screen
                 child: Column(
@@ -124,7 +125,7 @@ class _ChattingPageState extends State<ChattingPage> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: media.width * 16 / 428, vertical: media.height * 5 / 926),
+                          padding: EdgeInsets.symmetric(horizontal: media.width * app_widths.width16, vertical: media.height * 5 / 926),
                           child: const CircularProgressIndicator(strokeWidth: 2),
                         ),
                       ),

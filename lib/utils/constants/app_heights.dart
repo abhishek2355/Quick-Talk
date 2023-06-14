@@ -1,5 +1,6 @@
 const double height1 = 1 / 926;
 const double height2 = 2 / 926;
+const double height4 = 4 / 926;
 const double height5 = 5 / 926;
 const double height10 = 10 / 926;
 const double height15 = 15 / 926;
