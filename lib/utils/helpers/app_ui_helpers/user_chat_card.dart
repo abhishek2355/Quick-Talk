@@ -33,23 +33,25 @@ class _ChatUserCardState extends State<ChatUserCard> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: media.height * app_heights.height100,
-      child: Card(
-        margin: EdgeInsets.symmetric(vertical: media.height * 3 / 926),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        color: Colors.lightBlue[100],
-        elevation: 1,
-        child: InkWell(
-          // Navigat to the chat screen
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChattingPage(user: widget.user),
-              ),
-            );
-          },
-
-          child: Padding(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: media.width * app_widths.width10),
+        child: Card(
+          margin: EdgeInsets.symmetric(vertical: media.height * app_heights.height2),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          color: Colors.white,
+          elevation: 1,
+          child: InkWell(
+            // Navigat to the chat screen
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChattingPage(user: widget.user),
+                ),
+              );
+            },
+      
+            child: Padding(
               padding: EdgeInsets.symmetric(horizontal: media.width * app_widths.width16),
               child: StreamBuilder(
                 stream: APIs.getLastMessage(widget.user),
@@ -57,7 +59,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                   final data = snapshot.data?.docs;
                   final _list = data?.map((e) => Messages.fromJson(e.data())).toList() ?? [];
                   if (_list.isNotEmpty) _message = _list[0];
-
+    
                   return Row(
                     children: [
                       // User profile icon
@@ -66,13 +68,17 @@ class _ChatUserCardState extends State<ChatUserCard> {
                         child: Container(
                           alignment: Alignment.centerLeft,
                           child: InkWell(
+                            // When clicked on the profile picture then move to the Profile Page
                             onTap: () {
                               showDialog(
-                                  context: context,
-                                  builder: (_) => ViewProfileDialog(
-                                        user: widget.user,
-                                      ));
+                                context: context,
+                                builder: (_) => ViewProfileDialog(
+                                  user: widget.user,
+                                )
+                              );
                             },
+
+                            // Profile picture of user
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(media.height * app_heights.height30),
                               child: CachedNetworkImage(
@@ -87,21 +93,26 @@ class _ChatUserCardState extends State<ChatUserCard> {
                           ),
                         ),
                       ),
-
+    
                       // users name and about
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            // user's name
                             Text(
                               widget.user.name,
                               maxLines: 1,
-                              style: TextStyle(fontSize: media.height * app_heights.height24),
+                              style: TextStyle(fontSize: media.height * app_heights.height24,fontWeight: FontWeight.w500),
                             ),
+
+                            // SizedBox with height 5
                             SizedBox(
                               height: media.height * app_heights.height5,
                             ),
+
+                            // Last message or about text
                             Text(
                               _message != null ? _message!.msg : widget.user.about,
                               maxLines: 1,
@@ -110,28 +121,31 @@ class _ChatUserCardState extends State<ChatUserCard> {
                           ],
                         ),
                       ),
-
+    
                       // Last message time
                       Container(
-                          alignment: Alignment.centerRight,
-                          child: Center(
-                            child: _message == null
-                                ? null
-                                : _message!.read.isEmpty && _message!.fromId != APIs.user.uid
-                                    ? Container(
-                                        width: media.height * 15 / 926,
-                                        height: media.height * 15 / 926,
-                                        decoration: BoxDecoration(color: Colors.greenAccent.shade400, borderRadius: BorderRadius.circular(20)),
-                                      )
-                                    : Text(
-                                        MyDateUtil.getLastMessageTime(context: context, time: _message!.sent),
-                                        style: TextStyle(fontSize: media.height * 18 / 926),
-                                      ),
-                          )),
+                        alignment: Alignment.centerRight,
+                        child: Center(
+                          child: _message == null
+                            ? null
+                            : _message!.read.isEmpty && _message!.fromId != APIs.user.uid
+                                ? Container(
+                                    width: media.height * app_heights.height15,
+                                    height: media.height * app_heights.height15,
+                                    decoration: BoxDecoration(color: Colors.greenAccent.shade400, borderRadius: BorderRadius.circular(20)),
+                                  )
+                                : Text(
+                                    MyDateUtil.getLastMessageTime(context: context, time: _message!.sent),
+                                    style: TextStyle(fontSize: media.height * app_heights.height18),
+                                  ),
+                        )
+                      ),
                     ],
                   );
                 },
-              )),
+              )
+            ),
+          ),
         ),
       ),
     );
