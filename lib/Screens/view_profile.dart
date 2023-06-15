@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
-import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
 
 class ViewUserProfile extends StatefulWidget {
   final UserChat user;
