@@ -48,7 +48,7 @@ class _ProfileState extends State<Profile> {
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(media.height * app_heights.height70),
               child: AppBar(
-                backgroundColor: const Color.fromARGB(255, 181, 227, 248),
+                backgroundColor:  Colors.white,
                 iconTheme: IconThemeData(color: Colors.black, size: media.height * app_heights.height28),
                 title: Text(
                   app_strings.appName,
@@ -111,18 +111,6 @@ class _ProfileState extends State<Profile> {
               child: Container(
                 height: media.height,
                 width: media.width,
-
-                // Background color
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [
-                      Colors.white,
-                      Color.fromARGB(255, 52, 174, 231),
-                    ],
-                  ),
-                ),
 
                 // Content of screen
                 child: Form(

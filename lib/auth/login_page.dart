@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:chat_app/Screens/home_page.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/app_dialogbar.dart';
-import 'package:dio/dio.dart';
 import 'package:chat_app/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

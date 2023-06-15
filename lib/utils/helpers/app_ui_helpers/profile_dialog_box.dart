@@ -14,7 +14,7 @@ class ViewProfileDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
     return AlertDialog(
-      backgroundColor: const Color.fromARGB(255, 181, 227, 248).withOpacity(0.9),
+      backgroundColor:  Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       content: SizedBox(
         height: media.height * app_heights.height400,
@@ -24,12 +24,12 @@ class ViewProfileDialog extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(media.height * app_heights.height125),
+                borderRadius: BorderRadius.circular(media.height * app_heights.height150),
                 child: CachedNetworkImage(
-                  width: media.height * app_heights.height250,
-                  height: media.height * app_heights.height250,
+                  width: media.height * app_heights.height300,
+                  height: media.height * app_heights.height300,
                   imageUrl: user.image,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                   errorWidget: (context, url, error) => const CircleAvatar(
                     child: Icon(CupertinoIcons.person),
                   ),
