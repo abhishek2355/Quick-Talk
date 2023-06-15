@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chat_app/Screens/home_page.dart';
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/app_dialogbar.dart';
+import 'package:dio/dio.dart';
 import 'package:chat_app/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -60,8 +61,9 @@ class _LoginPageState extends State<LoginPage> {
     try {
       // Check internet connection of device
       await InternetAddress.lookup('google.com');
+
       // Trigger the authentication flow
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleUser = await GoogleSignIn(clientId: "789322641949-ivn7som5uhla1mqv4ic00sbhr1ml4lfp.apps.googleusercontent.com").signIn();
 
       // Obtain the auth details from the request
       final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;

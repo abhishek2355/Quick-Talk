@@ -2,26 +2,19 @@ import 'package:chat_app/Screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
-import 'package:flutter_notification_channel/flutter_notification_channel.dart';
-import 'package:flutter_notification_channel/notification_importance.dart';
 
 import 'firebase_options.dart';
 import 'package:flutter/services.dart';
 
 late Size media;
 void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
   // Firebase initialization
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  var result = await FlutterNotificationChannel.registerNotificationChannel(
-    description: 'For Showing Message Notification',
-    id: 'quick_talk',
-    importance: NotificationImportance.IMPORTANCE_HIGH,
-    name: 'Quick Talk',
   );
 
   // Run the main application
