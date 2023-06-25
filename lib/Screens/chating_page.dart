@@ -62,7 +62,7 @@ class _ChattingPageState extends State<ChattingPage> {
             child: Scaffold(
               // Appbar of the chat screen
               appBar: PreferredSize(
-                preferredSize: Size.fromHeight(media.height * app_heights.height80),
+                preferredSize: Size.fromHeight(media.height * app_heights.height90),
                 child: AppBar(
                   backgroundColor: Colors.white,
                   automaticallyImplyLeading: false,

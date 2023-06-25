@@ -80,7 +80,7 @@ class _MessageCardState extends State<MessageCard> {
                 //  Show the time of message
                 Text(
                   MessageSendTime.getTimeOfMessages(context: context, time: widget.messages.sent),
-                  style: TextStyle(fontSize: media.height * app_heights.height15, color: Colors.black),
+                  style: TextStyle(fontSize: media.width * app_widths.width10, color: Colors.black),
                 ),
               ],
             ),
@@ -112,7 +112,7 @@ class _MessageCardState extends State<MessageCard> {
             padding: EdgeInsets.all(widget.messages.type == Type.text ? media.height * app_heights.height20 : media.height * app_heights.height10),
             margin: EdgeInsets.symmetric(horizontal: media.width * app_widths.width10, vertical: media.height * app_heights.height10),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Text or image
                 Container(
@@ -148,12 +148,12 @@ class _MessageCardState extends State<MessageCard> {
                       // Sending Time
                       Text(
                         MessageSendTime.getTimeOfMessages(context: context, time: widget.messages.sent),
-                        style: TextStyle(fontSize: media.height * app_heights.height15, color: Colors.black),
+                        style: TextStyle(fontSize: media.width * app_widths.width10, color: Colors.black),
                       ),
 
                       // SizedBox with width 10
                       SizedBox(
-                        width: media.width * app_widths.width2,
+                        width: media.width * app_widths.width1,
                       ),
 
                       // If message is read then it will work
@@ -161,12 +161,12 @@ class _MessageCardState extends State<MessageCard> {
                         ? Icon(
                             Icons.done_all_rounded,
                             color: Colors.purple,
-                            size: media.height * app_heights.height20,
+                            size: media.width * app_widths.width10,
                           )
                         : Icon(
                             Icons.done_all_rounded,
                             color: Colors.white,
-                            size: media.height * app_heights.height20,
+                            size: media.width * app_widths.width10,
                           ),
                     ],
                   ),

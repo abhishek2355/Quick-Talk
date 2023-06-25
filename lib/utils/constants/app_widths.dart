@@ -1,3 +1,4 @@
+const double width1 = 1 / 428;
 const double width2 = 2 / 428;
 const double width10 = 10 / 428;
 const double width16 = 16 / 428;

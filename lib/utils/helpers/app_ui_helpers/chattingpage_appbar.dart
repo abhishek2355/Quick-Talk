@@ -83,43 +83,16 @@ class ChattingAppbar extends StatelessWidget {
                       // User's Name
                       SizedBox(
                         width: media.width * app_widths.width190,
-                        child: Text(
-                          list.isNotEmpty ? list[0].name : widget.user.name,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: media.height * app_heights.height30),
+                        child: FittedBox(
+                          fit: BoxFit.fitHeight,
+                          child: Text(
+                            list.isNotEmpty ? list[0].name : widget.user.name,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: media.height * app_heights.height30),
+                          ),
                         ),
                       ),
-                      
-                      // Video call Icon
-                      SizedBox(
-                        child: InkWell(
-                          onTap: () {},
-                          child: Image.asset('${app_strings.imagePath}video.png', height: media.height * app_heights.height18, width: media.height * app_heights.height30),
-                        ),
-                      ),
-
-                      // SizedBox with width 16
-                      SizedBox(width: media.width * 16 / 428,),
-
-                      // Audio Call Icon
-                      SizedBox(
-                        child: InkWell(
-                          onTap: () {},
-                          child: Image.asset('${app_strings.imagePath}audio_call.png', height: media.height * app_heights.height21, width: media.height * app_heights.height30),
-                        ),
-                      ),
-
-                      // SizedBox with width 16
-                      SizedBox(width: media.width * 12 / 428,),
-
-                      // More Icon 
-                      SizedBox(
-                        child:InkWell(
-                          onTap: (){},
-                          child: Icon(Icons.more_vert_rounded,size: media.height * app_heights.height30),
-                        )
-                      )
                     ],
                   ),
                           
@@ -133,13 +106,13 @@ class ChattingAppbar extends StatelessWidget {
                           ? 'online'
                           : MyDateUtil.getLastActiveTime(context: context, lastActive: list[0].lastActive)
                       : MyDateUtil.getLastActiveTime(context: context, lastActive: widget.user.lastActive),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                     style: list.isNotEmpty
                       ? list[0].isOnline
                           ? TextStyle(color: Colors.green, fontSize: media.height * app_heights.height18)
-                          : TextStyle(color: Colors.black54, fontSize: media.height * app_heights.height18)
-                      : TextStyle(color: Colors.black54, fontSize: media.height * app_heights.height18),
+                          : TextStyle(color: Colors.black54, fontSize: media.width * app_widths.width16)
+                      : TextStyle(color: Colors.black54, fontSize: media.width * app_widths.width16),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ],
               ),
