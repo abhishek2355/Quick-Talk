@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
       // Once signed in, return the UserCredential
       return await APIs.auth.signInWithCredential(credential);
     } catch (e) {
-      Dialogs.showSnackbar(context, 'Something went wrong (check Internet!)');
+      Dialogs.showSnackbar(context, app_strings.networkerrortext);
       return null;
     }
   }
@@ -115,9 +115,9 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         children: [
                           SizedBox(height: media.height * 50 / 926,),
-                          Text('Enjoy the new experience of Chatting with global friends',style: TextStyle(fontSize: media.height * 34 / 926,fontWeight: FontWeight.bold),),
+                          Text(app_strings.loginpageText,style: TextStyle(fontSize: media.height * 34 / 926,fontWeight: FontWeight.bold),),
                           SizedBox(height: media.height * 25 / 926,),
-                          Text('Connect people arround the world for free',style: TextStyle(color: Colors.grey,fontSize: media.height * 20 / 926),)
+                          Text(app_strings.loginpageText,style: TextStyle(color: Colors.grey,fontSize: media.height * 20 / 926),)
                         ],
                       ),
                     ),
@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                         shadowColor: Colors.purple
                       ),
                       onPressed: (){_handlegoogleBtnClick();}, 
-                      child: Text('Get Started',style: TextStyle(fontSize: media.height * 25 / 926,fontWeight: FontWeight.bold,letterSpacing: 1,color: Colors.black),)
+                      child: Text(app_strings.loginButtonText,style: TextStyle(fontSize: media.height * 25 / 926,fontWeight: FontWeight.bold,letterSpacing: 1,color: Colors.black),)
                     ),
                   )
                 )

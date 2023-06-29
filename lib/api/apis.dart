@@ -111,7 +111,7 @@ class APIs {
         pushToken: '',
         createdAt: time,
         isOnline: false,
-        about: 'Hey, I am using we chat. ');
+        about: 'Hey, I am using Quick Talk. ');
 
     return await firestore.collection('user').doc(user.uid).set(ChatUser.toJson());
   }
@@ -224,5 +224,3 @@ class APIs {
   }
 }
 
-
-// Login with email and password

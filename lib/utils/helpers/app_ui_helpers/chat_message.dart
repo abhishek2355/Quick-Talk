@@ -4,12 +4,15 @@ import 'package:chat_app/main.dart';
 import 'package:chat_app/utils/helpers/app_ui_helpers/app_bottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 import '../../../model/message.dart';
 import '../../../helper/send_time.dart';
 import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
 import 'package:chat_app/utils/constants/app_widths.dart' as app_widths;
+import 'package:chat_app/utils/constants/app_strings.dart' as app_string;
 
+import 'app_dialogbar.dart';
 import 'my_date_utils.dart';
 
 class MessageCard extends StatefulWidget {
@@ -210,6 +213,7 @@ class _MessageCardState extends State<MessageCard> {
                       await Clipboard.setData(ClipboardData(text: widget.messages.msg)).then((value) {
                         // For close the bottomsheet
                         Navigator.pop(context);
+                        Dialogs.showSnackbar(context, "Text copied!");
                       });
                     }
                   },
@@ -221,7 +225,19 @@ class _MessageCardState extends State<MessageCard> {
                     size: media.height * app_heights.height30,
                   ),
                   name: 'Save Image',
-                  onTap: () {},
+                  onTap: () async {
+                    try{
+                      await GallerySaver.saveImage(widget.messages.msg,albumName: 'Quick Talk').then((success) {
+                        Navigator.pop(context);
+                        if(success != null && success){
+                          Dialogs.showSnackbar(context, "Image Saved!");
+                        }
+                      });
+                    }
+                    catch(e){
+                      Dialogs.showSnackbar(context, app_string.networkerrortext);
+                    }
+                  },
                 ),
             
             // Divider 
@@ -243,6 +259,7 @@ class _MessageCardState extends State<MessageCard> {
                 onTap: () {
                   APIs.deleteMessage(widget.messages).then((value) {
                     Navigator.pop(context);
+                    Dialogs.showSnackbar(context, 'Deleted!');
                   });
                 },
               ),

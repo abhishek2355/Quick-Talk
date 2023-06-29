@@ -6,13 +6,12 @@ const appName = 'Quick Talk';
 
 // Welcome text
 const welcomeText = 'Welcome to Quick Talk';
+const networkerrortext = 'Something went wrong (check Internet!)';
 
 // Loginpage text
-const loginpageEmailHintText = 'Enter E-mail';
-const loginpagePasswordHintText = 'Enter Password';
-const loginpageEmailLableText = 'Email';
-const loginpagePasswordLableText = 'Password';
-const loginButtonText = 'Login';
+const loginButtonText = 'Get Started';
+const loginpageText = 'Enjoy the new experience of Chatting with global friends';
+const loginPagesubText = 'Connect people arround the world for free';
 
 // HomePage text
 const homepageSearchbarText = 'Name or email';
@@ -38,3 +37,4 @@ const registerPageSetPasswordLabletext = 'Set Password';
 const mobileNumberHinttext = 'Enter phone';
 const mobileNumberLabletext = 'Phone';
 const registerButtonTextLable = 'Register';
+
