@@ -19,7 +19,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
     // For give an animation to the app icon
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {

@@ -8,11 +8,13 @@ import 'package:flutter/services.dart';
 
 late Size media;
 void main() async {
+  // Ensure Flutter engine is initialized
+  WidgetsFlutterBinding.ensureInitialized();
 
-  WidgetsFlutterBinding.ensureInitialized();
-  // Firebase initialization
-  WidgetsFlutterBinding.ensureInitialized();
+  // Used to stop the rotation of app
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  // Firebase Database initialization
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -29,10 +31,8 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       // For remove debug banner from we chat application
       debugShowCheckedModeBanner: false,
-
       // Title for the application
       title: app_strings.appName,
-
       // Splashscreen call
       home: SplashScreen(),
     );

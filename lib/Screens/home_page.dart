@@ -5,41 +5,56 @@ import 'package:chat_app/utils/helpers/app_ui_helpers/user_chat_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import '../model/chat_user.dart';
 import 'package:chat_app/utils/constants/app_strings.dart' as app_strings;
 import 'package:chat_app/utils/constants/app_heights.dart' as app_heights;
 
+class HomepageController extends GetxController{
+  // For search engin
+  RxBool isSearch = false.obs;
+  // Update isSearch
+  updateIsSearchValue(){
+    isSearch.value = !isSearch.value;
+  }
+  // For store the search user's in list
+  RxList searchlist = [].obs;
+}
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  late HomepageController _homePageController;
   // For storing all users
   List<UserChat> _list = [];
 
-  // For storing serched user
-  final List<UserChat> _searchlist = [];
-
-  // For storing search
-  bool _isSearch = false;
   @override
   void initState() {
     super.initState();
+    // initialize the getx controller
+    _homePageController = HomepageController();
+    // Get self infomation
     APIs.getSelfInfo();
-
     // For showing status online or offline
     SystemChannels.lifecycle.setMessageHandler((message) {
       if (APIs.auth.currentUser != null) {
         if (message.toString().contains('resume')) APIs.updateActiveStatus(true);
         if (message.toString().contains('pause')) APIs.updateActiveStatus(false);
       }
-
       return Future.value(message);
     });
+  }
+
+  @override
+  void dispose(){
+    // Dispose of the controller when the widget is disposed
+    _homePageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -52,16 +67,15 @@ class _HomePageState extends State<HomePage> {
       },
       child: WillPopScope(
         onWillPop: () async {
-          if (_isSearch) {
-            setState(() {
-              _isSearch = !_isSearch;
-            });
+          if (_homePageController.isSearch.value) {
+            _homePageController.updateIsSearchValue();
             return Future.value(false);
           } else {
             await APIs.updateActiveStatus(false);
             return Future.value(true);
           }
         },
+
         child: Container(
           color: Colors.white,
           child: SafeArea(
@@ -72,7 +86,8 @@ class _HomePageState extends State<HomePage> {
                 child: AppBar(
                   backgroundColor: Colors.white,
                   // App Text
-                  title: (_isSearch)
+                  title: Obx(() {
+                    return (_homePageController.isSearch.value)
                       ? TextFormField(
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -84,37 +99,32 @@ class _HomePageState extends State<HomePage> {
         
                           // When search text is entered then update the search list
                           onChanged: (val) {
-                            _searchlist.clear();
+                            _homePageController.searchlist.clear();
         
                             // Iterate the main list
                             for (var i in _list) {
                               if (i.name.toLowerCase().contains(val.toLowerCase()) || (i.email.toLowerCase().contains(val.toLowerCase()))) {
-                                _searchlist.add(i);
+                                _homePageController.searchlist.add(i);
                               }
-                              setState(
-                                () {
-                                  _searchlist;
-                                },
-                              );
+                              _homePageController.searchlist;
                             }
                           },
                         )
                       : Text(
                           app_strings.appName,
                           style: TextStyle(fontSize: media.height * app_heights.height28, color: Colors.black, fontWeight: FontWeight.bold),
-                        ),
+                        );
+                    }
+                  ),
         
                   actions: [
                     // Search Icon
                     IconButton(
                       onPressed: () {
-                        setState(
-                          () {
-                            _isSearch = !_isSearch;
-                          },
-                        );
+                        _homePageController.updateIsSearchValue();
                       },
-                      icon: (_isSearch)
+                      icon: Obx(() {
+                        return (_homePageController.isSearch.value)
                           ? Icon(
                               CupertinoIcons.clear_circled_solid,
                               color: Colors.black,
@@ -124,7 +134,9 @@ class _HomePageState extends State<HomePage> {
                               Icons.search,
                               size: media.height * app_heights.height35,
                               color: Colors.black,
-                            ),
+                            );
+                        }
+                      )
                     ),
         
                     // Profile icons
@@ -178,19 +190,19 @@ class _HomePageState extends State<HomePage> {
                           }
         
                           if (_list.isNotEmpty) {
-                            return ListView.builder(
-                              physics: const BouncingScrollPhysics(),
-        
-                              itemBuilder: ((context, index) {
-                                return ChatUserCard(
-                                  // if we search then search list will show
-                                  user: (_isSearch) ? _searchlist[index] : _list[index],
-                                );
-                              }),
-        
-                              // If we search user then count will be searchlist count otherwise main list count
-                              itemCount: (_isSearch) ? _searchlist.length : _list.length,
-                            );
+                            return Obx(() {
+                              return ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                itemBuilder: ((context, index){
+                                  return ChatUserCard(
+                                    // if we search then search list will show
+                                    user: (_homePageController.isSearch.value) ? _homePageController.searchlist[index] : _list[index],
+                                  );
+                                }),
+                                // If we search user then count will be searchlist count otherwise main list count
+                                itemCount: (_homePageController.isSearch.value) ? _homePageController.searchlist.length : _list.length,
+                              );
+                            });
                           } else {
                             return Center(
                               child: Text(

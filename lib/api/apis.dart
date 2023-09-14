@@ -35,7 +35,6 @@ class APIs {
     fMessaging.getToken().then((t) {
       if (t != null) {
         me.pushToken = t;
-        log('Push Token: $t');
       }
     });
 
